@@ -2,10 +2,11 @@ import time
 import random
 import gymnasium as gym
 
-P = 5
-D = 8
-A = 16
-V = 10
+GAIN = 1.0
+P = 5 * GAIN
+D = 8 * GAIN
+A = 16 * GAIN
+V = 10 * GAIN
 
 env = gym.make("CartPole-v1", render_mode="human")
 env._max_episode_steps=1000
