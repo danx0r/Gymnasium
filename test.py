@@ -2,11 +2,17 @@ import time
 import random
 import gymnasium as gym
 
-GAIN = 1.0
-P = 5 * GAIN
-D = 8 * GAIN
-A = 16 * GAIN
-V = 10 * GAIN
+def controller(opservation):
+    GAIN = 1.0
+    P = 5 * GAIN
+    D = 8 * GAIN
+    A = 16 * GAIN
+    V = 10 * GAIN
+    pos, vel, ang, angv  = observation
+    ctl = pos * P + vel * D + ang * A + angv * V
+    action = 1 if ctl + 0.5 > random.random() else 0
+    return action
+
 
 env = gym.make("CartPole-v1", render_mode="human")
 env._max_episode_steps=1000
@@ -15,10 +21,7 @@ observation, info = env.reset()
 resets = 0
 rewards = 0
 for _ in range(1000):
-    pos, vel, ang, angv  = observation
-    ctl = pos * P + vel * D + ang * A + angv * V
-    #print (ctl)
-    action = 1 if ctl + 0.5 > random.random() else 0
+    action = controller(observation)
     observation, reward, terminated, truncated, info = env.step(action)
     rewards += reward
     #print (_, observation, reward, terminated, truncated, info)
