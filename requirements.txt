@@ -1,4 +1,5 @@
 gymnasium[box2d]
+gymnasium[mujoco]
 #swig # missing dep for box2d
 #box2d
 #box2d-kengz # don't ask too many questions
