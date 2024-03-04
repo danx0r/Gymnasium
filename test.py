@@ -4,7 +4,7 @@ import gymnasium as gym
 
 P = 5
 D = 8
-A = 10
+A = 16
 V = 10
 
 env = gym.make("CartPole-v1", render_mode="human")
@@ -21,7 +21,7 @@ for _ in range(1000):
     observation, reward, terminated, truncated, info = env.step(action)
     rewards += reward
     #print (_, observation, reward, terminated, truncated, info)
-    if terminated or truncated or abs(observation[0]) > 0.1:
+    if terminated or truncated or abs(observation[0]) > 0.15:
         print ("*************************RESET*************************")
         print (_, observation, "rewards:", rewards)
         observation, info = env.reset()
