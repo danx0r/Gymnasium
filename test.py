@@ -2,8 +2,8 @@ import time
 import random
 import gymnasium as gym
 
-P = 1
-D = 1
+P = 5
+D = 8
 A = 10
 V = 10
 
