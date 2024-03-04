@@ -2,7 +2,7 @@ import time
 import random
 import gymnasium as gym
 
-def controller(opservation):
+def controller(observation):
     GAIN = 1.0
     P = 5 * GAIN
     D = 8 * GAIN
@@ -14,7 +14,7 @@ def controller(opservation):
     return action
 
 
-env = gym.make("CartPole-v1", render_mode="human")
+env = gym.make("Walker2d-v4", render_mode="human")
 env._max_episode_steps=1000
 observation, info = env.reset()
 
