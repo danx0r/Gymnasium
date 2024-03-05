@@ -13,7 +13,7 @@ import gymnasium as gym
 def controller(obs, step):
     print (f"torso height: {obs[0]}")
     if step < 350:
-        act = [0, 1, 0, 0, 1, 0]
+        act = [1, -1, 1, 1, -1, 1]
     elif step < 700:
         act = [-1, 1, 0, -1, 1, 0]
     else:
@@ -24,6 +24,8 @@ def controller(obs, step):
 env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
 # env._max_episode_steps=1000
 observation, info = env.reset()
+
+time.sleep(2.5)
 
 resets = 0
 rewards = 0
