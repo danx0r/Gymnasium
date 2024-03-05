@@ -1,6 +1,5 @@
-box2d==2.3.7
+box2d>=2.3.2
 gymnasium[box2d]
 gymnasium[mujoco]
-#swig # missing dep for box2d
-#box2d
-#box2d-kengz # don't ask too many questions
+torch
+torchvision

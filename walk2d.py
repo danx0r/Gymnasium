@@ -10,6 +10,7 @@ import gymnasium as gym
 # knee: -1 contract (heel to butt; kneeling), 1 extend (locked knee)
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
+
 def controller(obs, step):
     print (f"torso height: {obs[0]}")
     if step < 350:
