@@ -7,7 +7,7 @@ import numpy as np
 import torch
 from torch import nn
 
-VERBOSE = True
+VERBOSE = 1
 
 from classes import *
 
@@ -23,6 +23,8 @@ def controller(obs):
     act = g_model(torch.tensor(obs).float())
     return np.array(act.detach())
 
+def squash(x):
+    return 1 / (2**-x + 1)
 
 def run():
     env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
@@ -31,11 +33,11 @@ def run():
 
     time.sleep(2)
 
-    for _ in range(100000):
+    for ii in range(100000):
         action = controller(observation)
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE:
-            print (_, "OBSERVATION:", observation[:5], "\nACTION:", action)
+            print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
             print ()
         # time.sleep(.05)
     env.close()
@@ -49,20 +51,24 @@ def train():
 
     resets = 0
     rewards = 0
-    for _ in range(250):
+    start = 0
+    for ii in range(250):
         action = controller(observation)
         observation, reward, terminated, truncated, info = env.step(action)
         rewards += reward
-        if VERBOSE:
-            print (_, "OBSERVATION:", observation[:5], "\nACTION:", action)
+        if VERBOSE >= 2:
+            print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
             print ()
         if terminated or truncated:
+            steps = ii-start
+            start = ii
+            loss = squash(steps)
             observation, info = env.reset()
             resets += 1
             rewards = 0
             if VERBOSE:
                 print ("*************************RESET*************************")
-                print (_, f"resets: {resets} rewards: {rewards}:")
+                print (ii, f"resets: {resets} rewards: {rewards} loss: {squash(steps*0.1)}")
         # time.sleep(.05)
     env.close()
 
