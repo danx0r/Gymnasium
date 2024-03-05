@@ -57,7 +57,7 @@ if __name__ == "__main__":
     # main()
     from torch import nn
     g_model = NeuralNetwork()
-    # t = torch.tensor([0.0, 0, 0, 0, 0, 0])
-    # pred = model(t)
-    # print (pred)
+    t = torch.tensor([0.0] * 17)
+    pred = g_model(t)
+    print (pred)
     main()
