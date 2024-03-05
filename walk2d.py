@@ -1,6 +1,8 @@
 import time
 import random
 import gymnasium as gym
+import torch
+
 from classes import *
 
 #
@@ -11,7 +13,6 @@ from classes import *
 # knee: -1 contract (heel to butt; kneeling), 1 extend (locked knee)
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
-
 def controller(obs, step):
     print (f"torso height: {obs[0]}")
     if step < 350:
@@ -51,4 +52,9 @@ def main():
 if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print ("DEVICE:", device)
-    main()
+    # main()
+    from torch import nn
+    model = NeuralNetwork()
+    t = torch.tensor([0.0, 0, 0, 0, 0, 0])
+    pred = model(t)
+    print (pred)

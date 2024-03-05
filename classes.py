@@ -8,16 +8,16 @@ INNER_WIDTH = 256
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
-        self.flatten = nn.Flatten()
+        # self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(17, INNER_WIDTH),
+            nn.Linear(6, INNER_WIDTH),
             nn.ReLU(),
             nn.Linear(INNER_WIDTH, INNER_WIDTH),
             nn.ReLU(),
-            nn.Linear(INNER_WIDTH, 6),
+            nn.Linear(INNER_WIDTH, 17),
         )
 
     def forward(self, x):
-        x = self.flatten(x)
+        # x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
