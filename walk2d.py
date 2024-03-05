@@ -35,11 +35,12 @@ def main():
         observation, reward, terminated, truncated, info = env.step(action)
         rewards += reward
         if VERBOSE:
-            print (_, terminated, truncated)
+            print (_, "OBSERVATION:", observation[:5], "\nACTION:", action)
+            print ()
         if terminated or truncated:
             if VERBOSE:
                 print ("*************************RESET*************************")
-                print (_, observation, "rewards:", rewards)
+                print (_, "rewards:", rewards)
             observation, info = env.reset()
             resets += 1
             rewards = 0
