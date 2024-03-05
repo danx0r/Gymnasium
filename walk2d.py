@@ -14,17 +14,19 @@ from classes import *
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
 def controller(obs, step):
-    print (f"torso height: {obs[0]}")
-    if step < 350:
-        act = [1, -1, 1, 1, -1, 1]
-    elif step < 700:
-        act = [-1, 1, 0, -1, 1, 0]
-    else:
-        act = [1, -1, 0, 1, -1, 0]
+    # print (f"torso height: {obs[0]}")
+    # if step < 350:
+    #     act = [1, -1, 1, 1, -1, 1]
+    # elif step < 700:
+    #     act = [-1, 1, 0, -1, 1, 0]
+    # else:
+    #     act = [1, -1, 0, 1, -1, 0]
+    act = g_model(torch.tensor(obs).float())
     return act
 
 
 def main():
+    global observation, env
     env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
     # env._max_episode_steps=1000
     observation, info = env.reset()
@@ -54,7 +56,8 @@ if __name__ == "__main__":
     print ("DEVICE:", device)
     # main()
     from torch import nn
-    model = NeuralNetwork()
-    t = torch.tensor([0.0, 0, 0, 0, 0, 0])
-    pred = model(t)
-    print (pred)
+    g_model = NeuralNetwork()
+    # t = torch.tensor([0.0, 0, 0, 0, 0, 0])
+    # pred = model(t)
+    # print (pred)
+    main()
