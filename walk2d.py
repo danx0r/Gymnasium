@@ -1,6 +1,7 @@
 import time
 import random
 import gymnasium as gym
+from classes import *
 
 #
 # hip_r, knee_r, foot_r, hip_l, knee_l, foot_l
@@ -22,26 +23,32 @@ def controller(obs, step):
     return act
 
 
-env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
-# env._max_episode_steps=1000
-observation, info = env.reset()
+def main():
+    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
+    # env._max_episode_steps=1000
+    observation, info = env.reset()
 
-time.sleep(2.5)
+    time.sleep(2.5)
 
-resets = 0
-rewards = 0
-for _ in range(1000):
-    action = controller(observation, _)
-    observation, reward, terminated, truncated, info = env.step(action)
-    rewards += reward
-    print (_, terminated, truncated)
-    if terminated or truncated:
-        print ("*************************RESET*************************")
-        print (_, observation, "rewards:", rewards)
-        observation, info = env.reset()
-        resets += 1
-        rewards = 0
-    # time.sleep(.05)
-env.close()
+    resets = 0
+    rewards = 0
+    for _ in range(1000):
+        action = controller(observation, _)
+        observation, reward, terminated, truncated, info = env.step(action)
+        rewards += reward
+        print (_, terminated, truncated)
+        if terminated or truncated:
+            print ("*************************RESET*************************")
+            print (_, observation, "rewards:", rewards)
+            observation, info = env.reset()
+            resets += 1
+            rewards = 0
+        # time.sleep(.05)
+    env.close()
 
-print ("Golf score:", resets)
+    print ("Golf score:", resets)
+
+if __name__ == "__main__":
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print ("DEVICE:", device)
+    main()
