@@ -1,8 +1,11 @@
 import time
 import random
+import argparse
+import pickle
 import gymnasium as gym
 import numpy as np
 import torch
+from torch import nn
 
 VERBOSE = True
 
@@ -21,8 +24,8 @@ def controller(obs, step):
     return np.array(act.detach())
 
 
-def main():
-    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=True)
+def main(train = False):
+    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=train)
     # env._max_episode_steps=1000
     observation, info = env.reset()
 
@@ -50,12 +53,25 @@ def main():
     print ("Golf score:", resets)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--epochs", type=int, default=1)
+    parser.add_argument("--saveevery", type=int, default=100)
+    parser.add_argument("--learnrate", type=float, default=0.0001)
+    parser.add_argument("--model", default="testmodel.pkl")
+    parser.add_argument("--device") #cuda or cpu
+    parser.add_argument("--train", action="store_true")
+    args = parser.parse_args()
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print ("DEVICE:", device)
-    # main()
-    from torch import nn
-    g_model = NeuralNetwork()
-    t = torch.tensor([0.0] * 17)
-    pred = g_model(t)
-    print (pred)
-    main()
+
+    if not args.train:
+        f = open(args.model, 'rb')
+        g_model = pickle.load(f)
+        f.close()
+        main()
+    else:
+        g_model = NeuralNetwork()
+        t = torch.tensor([0.0] * 17)
+        pred = g_model(t)
+        print (pred)
