@@ -19,13 +19,29 @@ from classes import *
 # knee: -1 contract (heel to butt; kneeling), 1 extend (locked knee)
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
-def controller(obs, step):
+def controller(obs):
     act = g_model(torch.tensor(obs).float())
     return np.array(act.detach())
 
 
-def main(train = False):
-    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=train)
+def run():
+    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
+    # env._max_episode_steps=1000
+    observation, info = env.reset()
+
+    time.sleep(2)
+
+    for _ in range(100000):
+        action = controller(observation)
+        observation, reward, terminated, truncated, info = env.step(action)
+        if VERBOSE:
+            print (_, "OBSERVATION:", observation[:5], "\nACTION:", action)
+            print ()
+        # time.sleep(.05)
+    env.close()
+
+def train():
+    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=True)
     # env._max_episode_steps=1000
     observation, info = env.reset()
 
@@ -34,23 +50,21 @@ def main(train = False):
     resets = 0
     rewards = 0
     for _ in range(250):
-        action = controller(observation, _)
+        action = controller(observation)
         observation, reward, terminated, truncated, info = env.step(action)
         rewards += reward
         if VERBOSE:
             print (_, "OBSERVATION:", observation[:5], "\nACTION:", action)
             print ()
         if terminated or truncated:
-            if VERBOSE:
-                print ("*************************RESET*************************")
-                print (_, "rewards:", rewards)
             observation, info = env.reset()
             resets += 1
             rewards = 0
+            if VERBOSE:
+                print ("*************************RESET*************************")
+                print (_, f"resets: {resets} rewards: {rewards}:")
         # time.sleep(.05)
     env.close()
-
-    print ("Golf score:", resets)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -69,9 +83,10 @@ if __name__ == "__main__":
         f = open(args.model, 'rb')
         g_model = pickle.load(f)
         f.close()
-        main()
+        run()
     else:
         g_model = NeuralNetwork()
         t = torch.tensor([0.0] * 17)
         pred = g_model(t)
         print (pred)
+        train()
