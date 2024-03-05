@@ -1,7 +1,10 @@
 import time
 import random
 import gymnasium as gym
+import numpy as np
 import torch
+
+VERBOSE = True
 
 from classes import *
 
@@ -14,35 +17,29 @@ from classes import *
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
 def controller(obs, step):
-    # print (f"torso height: {obs[0]}")
-    # if step < 350:
-    #     act = [1, -1, 1, 1, -1, 1]
-    # elif step < 700:
-    #     act = [-1, 1, 0, -1, 1, 0]
-    # else:
-    #     act = [1, -1, 0, 1, -1, 0]
     act = g_model(torch.tensor(obs).float())
-    return act
+    return np.array(act.detach())
 
 
 def main():
-    global observation, env
-    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
+    env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=True)
     # env._max_episode_steps=1000
     observation, info = env.reset()
 
-    time.sleep(2.5)
+    time.sleep(2)
 
     resets = 0
     rewards = 0
-    for _ in range(1000):
+    for _ in range(250):
         action = controller(observation, _)
         observation, reward, terminated, truncated, info = env.step(action)
         rewards += reward
-        print (_, terminated, truncated)
+        if VERBOSE:
+            print (_, terminated, truncated)
         if terminated or truncated:
-            print ("*************************RESET*************************")
-            print (_, observation, "rewards:", rewards)
+            if VERBOSE:
+                print ("*************************RESET*************************")
+                print (_, observation, "rewards:", rewards)
             observation, info = env.reset()
             resets += 1
             rewards = 0
