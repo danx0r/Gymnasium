@@ -4,8 +4,8 @@ import gymnasium as gym
 
 def controller(observation):
     co, si, av  = observation
-    print ("CONTROLLER obs:", co, si, av)
-    action = 1.0
+    action = si * -100 + av * -1
+    print ("CONTROLLER obs:", co, si, av, "ACT:", action)
     return [action]
 
 
@@ -14,15 +14,14 @@ env._max_episode_steps=200
 while True:
     observation, info = env.reset()
     co, si, av = observation
-    print (co, si)
-    if abs(si) < .1 and co > .9:
+    if abs(si) < .2 and co > .9:
         break
 time.sleep(1)
 
 resets = 0
 rewards = 0
 for _ in range(200):
-    print (_)
+    print (_, end=" ")
     action = controller(observation)
     observation, reward, terminated, truncated, info = env.step(action)
     rewards += reward
@@ -33,7 +32,7 @@ for _ in range(200):
         observation, info = env.reset()
         resets += 1
         rewards = 0
-    #time.sleep(.005)
+    # time.sleep(.02)
 env.close()
 
 print ("Golf score:", resets)
