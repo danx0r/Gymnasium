@@ -3,16 +3,21 @@ import random
 import gymnasium as gym
 
 def controller(observation):
-    GAIN = 1.0
     co, si, av  = observation
     print ("CONTROLLER obs:", co, si, av)
-    action = 0.0
+    action = 1.0
     return [action]
 
 
 env = gym.make("Pendulum-v1", render_mode="human")
 env._max_episode_steps=200
-observation, info = env.reset()
+while True:
+    observation, info = env.reset()
+    co, si, av = observation
+    print (co, si)
+    if abs(si) < .1 and co > .9:
+        break
+time.sleep(1)
 
 resets = 0
 rewards = 0
