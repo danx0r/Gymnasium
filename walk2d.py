@@ -26,7 +26,7 @@ def controller(obs):
 def squash(x):
     return 1 / (2**-x + 1)
 
-def run():
+def runn():
     env = gym.make("Walker2d-v4", render_mode="human", terminate_when_unhealthy=False)
     # env._max_episode_steps=1000
     observation, info = env.reset()
@@ -62,13 +62,12 @@ def train():
         if terminated or truncated:
             steps = ii-start
             start = ii
-            loss = squash(steps)
             observation, info = env.reset()
             resets += 1
             rewards = 0
             if VERBOSE:
                 print ("*************************RESET*************************")
-                print (ii, f"resets: {resets} rewards: {rewards} loss: {squash(steps*0.1)}")
+                print (ii, f"resets: {resets} rewards: {rewards} steps: {steps} loss: {squash(steps*0.1)}")
         # time.sleep(.05)
     env.close()
 
@@ -89,7 +88,7 @@ if __name__ == "__main__":
         f = open(args.model, 'rb')
         g_model = pickle.load(f)
         f.close()
-        run()
+        runn()
     else:
         g_model = NeuralNetwork()
         t = torch.tensor([0.0] * 17)
