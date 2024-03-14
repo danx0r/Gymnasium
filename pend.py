@@ -32,7 +32,7 @@ def go(P, D, env):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--epochs", type=int, default=500)
     parser.add_argument("--P", type=float)
     parser.add_argument("--D", type=float)
     parser.add_argument("--train", action="store_true")
@@ -53,13 +53,29 @@ if __name__ == "__main__":
     else:
         best = 999999
         for i in range(args.epochs):
+            print (f"epoch={i}", end=" ")
             P = random.random() * 500 - 250
             D = random.random() * 20 - 10
 
             error = go(P, D, env)
+            print (f"P={P} D={D} error={error}")
             if error < best:
                 best = error
                 best_P = P
                 best_D = D
                 print (f"new best P={best_P} D={best_D} error={error}")
+
+        for i in range(args.epochs):
+            print (f"epoch={i}", end=" ")
+            P = random.random() * 5.0 - 2.5 + best_P
+            D = random.random() * .2 - .1 + best_D
+
+            error = go(P, D, env)
+            print (f"P={P} D={D} error={error}")
+            if error < best:
+                best = error
+                best_P = P
+                best_D = D
+                print (f"new best P={best_P} D={best_D} error={error}")
+
     env.close()
