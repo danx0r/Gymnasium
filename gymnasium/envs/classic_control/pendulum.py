@@ -161,8 +161,8 @@ class PendulumEnv(gym.Env):
             y = utils.verify_number_and_cast(y)
             high = np.array([x, y])
         low = -high  # We enforce symmetric limits.
-        #self.state = self.np_random.uniform(low=low, high=0)
-        self.state = [0, 0]
+        #self.state = self.np_random.uniform(low=low, high=high)
+        self.state = [-.1, -.1]
         self.last_u = None
 
         if self.render_mode == "human":
