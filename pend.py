@@ -11,8 +11,8 @@ def controller(observation):
     return [action]
 
 
-# env = gym.make("Pendulum-v1", render_mode="human")
-env = gym.make("Pendulum-v1")
+env = gym.make("Pendulum-v1", render_mode="human")
+# env = gym.make("Pendulum-v1")
 env._max_episode_steps=200
 observation, info = env.reset()
 
@@ -29,6 +29,6 @@ for ii in range(STEPS):
         print (ii, observation)
         observation, info = env.reset()
     # time.sleep(.02)
-error = error ** .5 / STEPS
+error = error / STEPS
 print ("ERROR:", error)
 env.close()
