@@ -16,7 +16,7 @@ from torch import nn
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
 def controller(obs):
-    act = [0] * 6
+    act = [(random.random() * 2 - 1) * .5 for x in range(6)]
     return act
 
 def runn(env, steps):
