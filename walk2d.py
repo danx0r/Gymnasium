@@ -24,41 +24,22 @@ def runn(env, steps):
     for ii in range(steps):
         action = controller(observation)
         observation, reward, terminated, truncated, info = env.step(action)
+        # print ("DEBUG", terminated, truncated)
         if VERBOSE & 1:
             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
             print ()
-        # time.sleep(.05)
+        if terminated or truncated:
+            break
+    return ii
 
-# def train(steps):
-#     env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=True)
-#     # env._max_episode_steps=1000
-#     observation, info = env.reset()
-
-#     time.sleep(.2)
-
-#     for ii in range(250):
-#         action = controller(observation)
-#         observation, reward, terminated, truncated, info = env.step(action)
-#         rewards += reward
-#         if VERBOSE & 2:
-#             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
-#             print ()
-#         if terminated or truncated:
-#             steps = ii-start
-#             start = ii
-#             observation, info = env.reset()
-#             resets += 1
-#             rewards = 0
-#             if VERBOSE & 4:
-#                 print ("*************************RESET*************************")
-#                 print (ii, f"resets: {resets} rewards: {rewards} steps: {steps} loss: {squash(steps*0.1)}")
-#         # time.sleep(.05)
-#     env.close()
+def train(env, steps, epochs):
+    error = runn(env, steps)
+    return error
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", type=int, default=1)
-    parser.add_argument("--steps", type=int, default=100)
+    parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
     parser.add_argument("--learnrate", type=float, default=0.0001)
     parser.add_argument("--train", action="store_true")
@@ -68,7 +49,9 @@ if __name__ == "__main__":
     VERBOSE = args.verbose
     SHOW = args.show
     if args.train:
-        pass
+        env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=True)
+        err = train(env, args.steps, args.epochs)
+        print ("ERROR:", err)
     else:
         env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=False)
         runn(env, args.steps)
