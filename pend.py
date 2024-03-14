@@ -2,10 +2,13 @@ import sys, time, argparse
 import random
 import gymnasium as gym
 
+VERBOSE = 0
+
 def controller(observation, P, D):
     co, si, av  = observation
     action = si * P + av * D
-    # print ("CONTROLLER obs:", co, si, av, "ACT:", action)
+    if VERBOSE & 2:
+        print ("CONTROLLER obs:", co, si, av, "ACT:", action)
     return [action]
 
 
@@ -14,7 +17,8 @@ STEPS = 100
 def go(P, D, env):
     error = 0
     observation, info = env.reset()
-    # print (f"P={P} D={D}")
+    if VERBOSE & 4:
+        print (f"P={P} D={D}")
     for ii in range(STEPS):
         action = controller(observation, P, D)
         # print (action)
@@ -37,7 +41,9 @@ if __name__ == "__main__":
     parser.add_argument("--D", type=float)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
+    parser.add_argument("--verbose", type=int, default=0)
     args = parser.parse_args()
+    VERBOSE = args.verbose
 
     if args.show:
         env = gym.make("Pendulum-v1", render_mode="human")
@@ -53,12 +59,14 @@ if __name__ == "__main__":
     else:
         best = 999999
         for i in range(args.epochs):
-            print (f"epoch={i}", end=" ")
+            if VERBOSE & 1:
+                print (f"epoch={i}", end=" ")
             P = random.random() * 500 - 250
             D = random.random() * 20 - 10
 
             error = go(P, D, env)
-            print (f"P={P} D={D} error={error}")
+            if VERBOSE & 1:
+                print (f"P={P} D={D} error={error}")
             if error < best:
                 best = error
                 best_P = P
@@ -66,16 +74,19 @@ if __name__ == "__main__":
                 print (f"new best P={best_P} D={best_D} error={error}")
 
         for i in range(args.epochs):
-            print (f"epoch={i}", end=" ")
+            if VERBOSE & 1:
+                print (f"epoch={i}", end=" ")
             P = random.random() * 5.0 - 2.5 + best_P
             D = random.random() * .2 - .1 + best_D
 
             error = go(P, D, env)
-            print (f"P={P} D={D} error={error}")
+            if VERBOSE & 1:
+                print (f"P={P} D={D} error={error}")
             if error < best:
                 best = error
                 best_P = P
                 best_D = D
                 print (f"new best P={best_P} D={best_D} error={error}")
 
+    print (f"best P={best_P} D={best_D} error={best}")
     env.close()
