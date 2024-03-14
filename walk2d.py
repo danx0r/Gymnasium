@@ -15,6 +15,14 @@ from torch import nn
 # knee: -1 contract (heel to butt; kneeling), 1 extend (locked knee)
 # foot: -1 extend (high heel/en pointe), 1 contract (walk on your heels)
 #
+# observation[0] = torso height (z of center)
+# observation[1] = torso angle
+# observation[2:8] = angle of hip_r, knee_r, foot_r, hip_l, knee_l, foot
+# observation[8] = torso x vel
+# observation[9] = torso z vel
+# observation[10] = torso ang vel
+# observation[11:16] = ang vel of hip_r, knee_r, foot_r, hip_l, knee_l, foot
+#
 def controller(obs):
     act = [(random.random() * 2 - 1) * .5 for x in range(6)]
     return act
