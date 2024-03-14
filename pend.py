@@ -1,34 +1,65 @@
-import sys, time
+import sys, time, argparse
 import random
 import gymnasium as gym
 
-def controller(observation):
-    GAIN = float(sys.argv[1])
+def controller(observation, P, D):
     co, si, av  = observation
-    action = si * -100 + av * -1
-    action *= GAIN
+    action = si * P + av * D
     # print ("CONTROLLER obs:", co, si, av, "ACT:", action)
     return [action]
 
 
-env = gym.make("Pendulum-v1", render_mode="human")
-# env = gym.make("Pendulum-v1")
-env._max_episode_steps=200
-observation, info = env.reset()
-
 STEPS = 100
-error = 0
-for ii in range(STEPS):
-    action = controller(observation)
-    # print (action)
-    observation, reward, terminated, truncated, info = env.step(action)
-    error += abs(observation[1])
-    # print (ii, observation, error)
-    if terminated or truncated:
-        print ("*************************RESET*************************")
-        print (ii, observation)
-        observation, info = env.reset()
-    # time.sleep(.02)
-error = error / STEPS
-print ("ERROR:", error)
-env.close()
+
+def go(P, D, env):
+    error = 0
+    observation, info = env.reset()
+    # print (f"P={P} D={D}")
+    for ii in range(STEPS):
+        action = controller(observation, P, D)
+        # print (action)
+        observation, reward, terminated, truncated, info = env.step(action)
+        error += abs(observation[1])
+        # print (ii, observation, error)
+        if terminated or truncated:
+            print ("*************************RESET*************************")
+            print (ii, observation)
+            observation, info = env.reset()
+        # time.sleep(.02)
+    error = error / STEPS
+    # print ("ERROR:", error)
+    return error
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--P", type=float)
+    parser.add_argument("--D", type=float)
+    parser.add_argument("--train", action="store_true")
+    parser.add_argument("--show", action="store_true")
+    args = parser.parse_args()
+
+    if args.show:
+        env = gym.make("Pendulum-v1", render_mode="human")
+    else:
+        env = gym.make("Pendulum-v1")
+    env._max_episode_steps=200
+
+    if not args.train:
+        P = args.P
+        D = args.D
+        err = go(P, D, env)
+        print (f"error={err}")
+    else:
+        best = 999999
+        for i in range(args.epochs):
+            P = random.random() * 500 - 250
+            D = random.random() * 20 - 10
+
+            error = go(P, D, env)
+            if error < best:
+                best = error
+                best_P = P
+                best_D = D
+                print (f"new best P={best_P} D={best_D} error={error}")
+    env.close()
