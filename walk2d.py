@@ -44,21 +44,23 @@ class Servo:
         return torque        
 
 class Controller:
+    # PDvals = [
+    #     (-7.0, -0.5),   #hip_r
+    #     (-3.0, -0.2),   #knee_r
+    #     (-1.0, -0.1),   #foot_r
+    #     (-7.0, -0.5),   #hip_l
+    #     (-3.0, -0.2),   #knee_l
+    #     (0, 0),   #foot_l
+    #     ]
+
+    GAIN = 1.2
     PDvals = [
-        (-7.0, -0.5),   #hip_r
-        (-3.0, -0.2),   #knee_r
-        (-1.0, -0.1),   #foot_r
-        (-7.0, -0.5),   #hip_l
-        (-3.0, -0.2),   #knee_l
-        (0, 0),   #foot_l
-        ]
-    PDvals = [
-        (-.75, -0.1),   #knee_l
-        (-.75, -0.07),   #knee_l
-        (-.75, -0.07),   #knee_l
-        (-.75, -0.1),   #knee_l
-        (-.75, -0.07),   #knee_l
-        (-.75, -0.07),   #knee_l
+        (-.75*GAIN, -0.1*GAIN),   #knee_l
+        (-.75*GAIN, -0.07*GAIN),   #knee_l
+        (-.75*GAIN, -0.07*GAIN),   #knee_l
+        (-.75*GAIN, -0.1*GAIN),   #knee_l
+        (-.75*GAIN, -0.07*GAIN),   #knee_l
+        (-.75*GAIN, -0.07*GAIN),   #knee_l
         ]
 
     joints = {
@@ -88,10 +90,12 @@ class Controller:
  
 def runn(env, steps):
     speed = 0.04
-    hip_range = 0.27
+    hip_range = 0.4
+    hip_offset = 0.1
     hip_l_phase = math.pi / 2
     hip_r_phase = -math.pi / 2
     knee_range = 0.56
+    knee_offset = 0.1
     knee_l_phase = -math.pi / 2
     knee_r_phase = math.pi / 2
     foot_range = 0.25
@@ -118,13 +122,13 @@ def runn(env, steps):
         
         speed = 0.032 + observation[1] * 0.012 + observation[10] * -0.0004
 
-        hip_l = math.sin(ii * speed + hip_l_phase) * hip_range
+        hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
         controller.goto('hip_l', hip_l)
-        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range
+        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range + hip_offset
         controller.goto('hip_r', hip_r)
-        knee_l = math.sin(ii * speed + knee_l_phase) * knee_range
+        knee_l = math.sin(ii * speed + knee_l_phase) * knee_range + knee_offset
         controller.goto('knee_l', knee_l)
-        knee_r = math.sin(ii * speed + knee_r_phase) * knee_range
+        knee_r = math.sin(ii * speed + knee_r_phase) * knee_range + knee_offset
         controller.goto('knee_r', knee_r)
         foot_l = math.sin(ii * speed + foot_l_phase) * foot_range + foot_offset
         controller.goto('foot_l', foot_l)
