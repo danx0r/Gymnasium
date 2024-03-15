@@ -18,7 +18,8 @@ class Servo:
 
     def update(self, pos, vel):
         perr = pos-self.target
-        torque = perr * P + vel * D
+        torque = perr * self.P + vel * self.D
+        print ("TORQUE:", torque)
         return torque        
 
 #
@@ -43,11 +44,13 @@ def controller(obs):
     return act
 
 def runn(env, steps):
+    foot_r = Servo(-0.5, -0.025)
+    foot_r.goto(-0.5)
     observation, info = env.reset()
     for ii in range(steps):
         action = controller(observation)
         if ii >= 50:
-            action[2] = -1.0
+            action[2] = foot_r.update(observation[4], observation[13])
         observation, reward, terminated, truncated, info = env.step(action)
         # print ("DEBUG", terminated, truncated)
         if VERBOSE & 1:
