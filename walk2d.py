@@ -39,7 +39,7 @@ class Servo:
         perr = pos-self.target
         torque = perr * self.P + vel * self.D
         # if self.name in ("foot_l", "hip_l"):
-        print ("TORQUE:", self.name, pos, vel, perr, torque)
+        # print ("TORQUE:", self.name, pos, vel, perr, torque)
         # sys.stdout.flush()
         return torque        
 
@@ -95,6 +95,7 @@ def runn(env, steps):
     knee_l_phase = -math.pi / 2
     knee_r_phase = math.pi / 2
     foot_range = 0.22
+    foot_offset = 0.121
     foot_l_phase = math.pi / 2
     foot_r_phase = -math.pi / 2
 
@@ -123,9 +124,9 @@ def runn(env, steps):
         controller.goto('knee_l', knee_l)
         knee_r = math.sin(ii * speed + knee_r_phase) * knee_range
         controller.goto('knee_r', knee_r)
-        foot_l = math.sin(ii * speed + foot_l_phase) * foot_range
+        foot_l = math.sin(ii * speed + foot_l_phase) * foot_range + foot_offset
         controller.goto('foot_l', foot_l)
-        foot_r = math.sin(ii * speed + foot_r_phase) * foot_range
+        foot_r = math.sin(ii * speed + foot_r_phase) * foot_range + foot_offset
         controller.goto('foot_r', foot_r)
     return ii
 
