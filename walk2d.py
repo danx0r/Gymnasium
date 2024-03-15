@@ -47,6 +47,16 @@ class Controller:
         (-3.0, -0.2),   #knee_l
         (-1.0, -0.1),   #foot_l
         ]
+    
+    joints = {
+        'hip_r': 0,
+        'knee_r': 1,
+        'foot_r': 2,
+        'hip_l': 3,
+        'knee_l': 41,
+        'foot_l': 5,
+    }
+
     def __init__(self):
         self.servos = [None] * 6
         self.act = [0] * 6
@@ -59,11 +69,14 @@ class Controller:
             vel = obs[11 + i]
             self.act[i] = self.servos[i].update(pos, vel)
         return self.act
+
+    def goto(self, joint, target):
+        self.servos[self.joints[joint]].goto(target)
  
 def runn(env, steps):
     controller = Controller()
-    controller.servos[2].goto(.15)
-    controller.servos[5].goto(.15)
+    controller.goto('foot_l', .15)
+    controller.goto('foot_r', .15)
     observation, info = env.reset()
     for ii in range(steps):
         action = controller.update(observation)
