@@ -39,7 +39,7 @@ class Servo:
         perr = pos-self.target
         torque = perr * self.P + vel * self.D
         # if self.name in ("foot_l", "hip_l"):
-        # print ("TORQUE:", self.name, pos, vel, perr, torque)
+        print ("TORQUE:", self.name, pos, vel, perr, torque)
         # sys.stdout.flush()
         return torque        
 
@@ -87,8 +87,8 @@ class Controller:
         self.servos[self.joints[joint]].goto(target)
  
 def runn(env, steps):
-    speed = 0.01
-    hip_range = 0.3
+    speed = 0.04
+    hip_range = 0.25
     hip_l_phase = math.pi / 2
     hip_r_phase = -math.pi / 2
 
