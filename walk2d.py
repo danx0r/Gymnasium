@@ -44,13 +44,13 @@ def controller(obs):
     return act
 
 def runn(env, steps):
-    foot_r = Servo(-0.5, -0.025)
-    foot_r.goto(-0.5)
+    knee_r = Servo(-3.0, -0.2)
+    knee_r.goto(-0.75)
     observation, info = env.reset()
     for ii in range(steps):
         action = controller(observation)
         if ii >= 50:
-            action[2] = foot_r.update(observation[4], observation[13])
+            action[1] = knee_r.update(observation[3], observation[12])
         observation, reward, terminated, truncated, info = env.step(action)
         # print ("DEBUG", terminated, truncated)
         if VERBOSE & 1:
