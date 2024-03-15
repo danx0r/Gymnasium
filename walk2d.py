@@ -62,6 +62,8 @@ class Controller:
  
 def runn(env, steps):
     controller = Controller()
+    controller.servos[2].goto(.15)
+    controller.servos[5].goto(.15)
     observation, info = env.reset()
     for ii in range(steps):
         action = controller.update(observation)
