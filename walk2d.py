@@ -1,4 +1,5 @@
 import time
+import math
 import random
 import argparse
 import pickle
@@ -6,21 +7,6 @@ import gymnasium as gym
 import numpy as np
 import torch
 from torch import nn
-
-class Servo:
-    def __init__(self, P, D):
-        self.P = P
-        self.D = D
-        self.target = 0.0
-
-    def goto(self, target):
-        self.target = target
-
-    def update(self, pos, vel):
-        perr = pos-self.target
-        torque = perr * self.P + vel * self.D
-        # print ("TORQUE:", torque)
-        return torque        
 
 #
 # hip_r, knee_r, foot_r, hip_l, knee_l, foot_l
@@ -38,6 +24,21 @@ class Servo:
 # observation[10] = torso ang vel
 # observation[11:16] = ang vel of hip_r, knee_r, foot_r, hip_l, knee_l, foot
 #
+class Servo:
+    def __init__(self, P, D):
+        self.P = P
+        self.D = D
+        self.target = 0.0
+
+    def goto(self, target):
+        self.target = target
+
+    def update(self, pos, vel):
+        perr = pos-self.target
+        torque = perr * self.P + vel * self.D
+        # print ("TORQUE:", torque)
+        return torque        
+
 class Controller:
     PDvals = [
         (-7.0, -0.5),   #hip_r
@@ -89,6 +90,9 @@ def runn(env, steps):
             print ()
         if terminated or truncated:
             break
+        hip_l = math.sin(ii * 0.1)
+        # print (hip_l)
+        controller.goto('hip_l', hip_l)
     return ii
 
 def train(env, steps, epochs):
