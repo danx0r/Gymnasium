@@ -7,6 +7,20 @@ import numpy as np
 import torch
 from torch import nn
 
+class Servo:
+    def __init__(self, P, D):
+        self.P = P
+        self.D = D
+        self.target = 0.0
+
+    def goto(self, target):
+        self.target = target
+
+    def update(self, pos, vel):
+        perr = pos-self.target
+        torque = perr * P + vel * D
+        return torque        
+
 #
 # hip_r, knee_r, foot_r, hip_l, knee_l, foot_l
 # (mujoco calls them thigh, leg, foot)
@@ -24,13 +38,16 @@ from torch import nn
 # observation[11:16] = ang vel of hip_r, knee_r, foot_r, hip_l, knee_l, foot
 #
 def controller(obs):
-    act = [(random.random() * 2 - 1) * .5 for x in range(6)]
+    # act = [(random.random() * 2 - 1) * .5 for x in range(6)]
+    act = [1.0 for x in range(6)]
     return act
 
 def runn(env, steps):
     observation, info = env.reset()
     for ii in range(steps):
         action = controller(observation)
+        if ii >= 50:
+            action[2] = -1.0
         observation, reward, terminated, truncated, info = env.step(action)
         # print ("DEBUG", terminated, truncated)
         if VERBOSE & 1:
@@ -62,5 +79,7 @@ if __name__ == "__main__":
         print ("ERROR:", err)
     else:
         env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=False)
+        observation, info = env.reset()
+        time.sleep(2)
         runn(env, args.steps)
         env.close()
