@@ -1,5 +1,6 @@
 import time
 import math
+import sys
 import random
 import argparse
 import pickle
@@ -37,8 +38,9 @@ class Servo:
     def update(self, pos, vel):
         perr = pos-self.target
         torque = perr * self.P + vel * self.D
-        if self.name == "hip_r":
-            print ("TORQUE:", torque)
+        # if self.name in ("foot_l", "hip_l"):
+        # print ("TORQUE:", self.name, pos, vel, perr, torque)
+        # sys.stdout.flush()
         return torque        
 
 class Controller:
@@ -48,7 +50,15 @@ class Controller:
         (-1.0, -0.1),   #foot_r
         (-7.0, -0.5),   #hip_l
         (-3.0, -0.2),   #knee_l
-        (-1.0, -0.1),   #foot_l
+        (0, 0),   #foot_l
+        ]
+    PDvals = [
+        (-.75, -0.1),   #knee_l
+        (-.75, -0.07),   #knee_l
+        (-.75, -0.07),   #knee_l
+        (-.75, -0.1),   #knee_l
+        (-.75, -0.07),   #knee_l
+        (-.75, -0.07),   #knee_l
         ]
 
     joints = {
@@ -78,7 +88,7 @@ class Controller:
  
 def runn(env, steps):
     speed = 0.01
-    hip_range = 1
+    hip_range = 0.3
     hip_l_phase = math.pi / 2
     hip_r_phase = -math.pi / 2
 
@@ -101,8 +111,8 @@ def runn(env, steps):
 
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range
         hip_r = math.sin(ii * speed + hip_r_phase) * hip_range
-        # controller.goto('hip_l', hip_l)
-        # controller.goto('hip_r', hip_r)
+        controller.goto('hip_l', hip_l)
+        controller.goto('hip_r', hip_r)
     return ii
 
 def train(env, steps, epochs):
