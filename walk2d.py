@@ -40,10 +40,10 @@ class Servo:
 #
 class Controller:
     PDvals = [
-        (-5.0, -0.3),   #hip_r
+        (-7.0, -0.5),   #hip_r
         (-3.0, -0.2),   #knee_r
         (-1.0, -0.1),   #foot_r
-        (-5.0, -0.3),   #hip_l
+        (-7.0, -0.5),   #hip_l
         (-3.0, -0.2),   #knee_l
         (-1.0, -0.1),   #foot_l
         ]
@@ -75,8 +75,10 @@ class Controller:
  
 def runn(env, steps):
     controller = Controller()
-    controller.goto('foot_l', .15)
-    controller.goto('foot_r', .15)
+    controller.goto('foot_l', .03)
+    controller.goto('foot_r', .02)
+    controller.goto('hip_l', .25)
+    controller.goto('hip_r', .25)
     observation, info = env.reset()
     for ii in range(steps):
         action = controller.update(observation)
