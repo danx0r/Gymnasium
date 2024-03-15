@@ -53,7 +53,7 @@ class Controller:
     #     (0, 0),   #foot_l
     #     ]
 
-    GAIN = 1.
+    GAIN = 1
     PDvals = [
         (-.9*GAIN, -0.12*GAIN),   #knee_l
         (-.9*GAIN, -0.084*GAIN),   #knee_l
@@ -87,9 +87,16 @@ class Controller:
 
     def goto(self, joint, target):
         self.servos[self.joints[joint]].goto(target)
+
+    def adjust_gain(self, adj):
+        if VERBOSE & 2:
+            print ("adjust gain:", adj)
+        for s in self.servos:
+            s.P *= adj
+            s.D *= adj
  
 def runn(env, steps):
-    speed = 0.04
+    speed = 0.031
     hip_range = 0.4
     hip_offset = 0.1
     hip_l_phase = math.pi / 2
@@ -99,7 +106,7 @@ def runn(env, steps):
     knee_l_phase = -math.pi / 2
     knee_r_phase = math.pi / 2
     foot_range = 0.25
-    foot_offset = 0.14725
+    foot_offset = .14
     foot_l_phase = math.pi / 2
     foot_r_phase = -math.pi / 2
 
@@ -120,7 +127,8 @@ def runn(env, steps):
         if terminated or truncated:
             break
         
-        speed = 0.032 #+ observation[1] * 0.006 + observation[10] * 0.0002
+        if ii==500:
+            controller.adjust_gain(1.2)
 
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
         controller.goto('hip_l', hip_l)
