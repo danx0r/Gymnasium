@@ -120,7 +120,7 @@ def runn(env, steps):
         if terminated or truncated:
             break
         
-        speed = 0.032 + observation[1] * 0.012 + observation[10] * -0.0004
+        speed = 0.032 #+ observation[1] * 0.006 + observation[10] * 0.0002
 
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
         controller.goto('hip_l', hip_l)
