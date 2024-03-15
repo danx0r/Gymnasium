@@ -94,8 +94,8 @@ def runn(env, steps):
     knee_range = 0.56
     knee_l_phase = -math.pi / 2
     knee_r_phase = math.pi / 2
-    foot_range = 0.22
-    foot_offset = 0.125
+    foot_range = 0.25
+    foot_offset = 0.14725
     foot_l_phase = math.pi / 2
     foot_r_phase = -math.pi / 2
 
