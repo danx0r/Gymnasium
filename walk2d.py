@@ -19,7 +19,7 @@ class Servo:
     def update(self, pos, vel):
         perr = pos-self.target
         torque = perr * self.P + vel * self.D
-        print ("TORQUE:", torque)
+        # print ("TORQUE:", torque)
         return torque        
 
 #
@@ -38,19 +38,33 @@ class Servo:
 # observation[10] = torso ang vel
 # observation[11:16] = ang vel of hip_r, knee_r, foot_r, hip_l, knee_l, foot
 #
-def controller(obs):
-    # act = [(random.random() * 2 - 1) * .5 for x in range(6)]
-    act = [1.0 for x in range(6)]
-    return act
-
+class Controller:
+    PDvals = [
+        (-5.0, -0.3),   #hip_r
+        (-3.0, -0.2),   #knee_r
+        (-1.0, -0.1),   #foot_r
+        (-5.0, -0.3),   #hip_l
+        (-3.0, -0.2),   #knee_l
+        (-1.0, -0.1),   #foot_l
+        ]
+    def __init__(self):
+        self.servos = [None] * 6
+        self.act = [0] * 6
+        for i in range(6):
+            self.servos[i] = Servo(self.PDvals[i][0], self.PDvals[i][1])
+    
+    def update(self, obs):
+        for i in range(6):
+            pos = obs[2 + i]
+            vel = obs[11 + i]
+            self.act[i] = self.servos[i].update(pos, vel)
+        return self.act
+ 
 def runn(env, steps):
-    knee_r = Servo(-3.0, -0.2)
-    knee_r.goto(-0.75)
+    controller = Controller()
     observation, info = env.reset()
     for ii in range(steps):
-        action = controller(observation)
-        if ii >= 50:
-            action[1] = knee_r.update(observation[3], observation[12])
+        action = controller.update(observation)
         observation, reward, terminated, truncated, info = env.step(action)
         # print ("DEBUG", terminated, truncated)
         if VERBOSE & 1:
