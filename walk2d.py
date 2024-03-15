@@ -25,10 +25,11 @@ from torch import nn
 # observation[11:16] = ang vel of hip_r, knee_r, foot_r, hip_l, knee_l, foot
 #
 class Servo:
-    def __init__(self, P, D):
+    def __init__(self, P, D, name):
         self.P = P
         self.D = D
         self.target = 0.0
+        self.name = name
 
     def goto(self, target):
         self.target = target
@@ -36,7 +37,8 @@ class Servo:
     def update(self, pos, vel):
         perr = pos-self.target
         torque = perr * self.P + vel * self.D
-        # print ("TORQUE:", torque)
+        if self.name == "hip_r":
+            print ("TORQUE:", torque)
         return torque        
 
 class Controller:
@@ -48,13 +50,13 @@ class Controller:
         (-3.0, -0.2),   #knee_l
         (-1.0, -0.1),   #foot_l
         ]
-    
+
     joints = {
         'hip_r': 0,
         'knee_r': 1,
         'foot_r': 2,
         'hip_l': 3,
-        'knee_l': 41,
+        'knee_l': 4,
         'foot_l': 5,
     }
 
@@ -62,7 +64,7 @@ class Controller:
         self.servos = [None] * 6
         self.act = [0] * 6
         for i in range(6):
-            self.servos[i] = Servo(self.PDvals[i][0], self.PDvals[i][1])
+            self.servos[i] = Servo(self.PDvals[i][0], self.PDvals[i][1], list(self.joints.keys())[i])
     
     def update(self, obs):
         for i in range(6):
@@ -75,12 +77,18 @@ class Controller:
         self.servos[self.joints[joint]].goto(target)
  
 def runn(env, steps):
+    speed = 0.01
+    hip_range = 1
+    hip_l_phase = math.pi / 2
+    hip_r_phase = -math.pi / 2
+
     controller = Controller()
     controller.goto('foot_l', .03)
     controller.goto('foot_r', .02)
     controller.goto('hip_l', .25)
     controller.goto('hip_r', .25)
     observation, info = env.reset()
+
     for ii in range(steps):
         action = controller.update(observation)
         observation, reward, terminated, truncated, info = env.step(action)
@@ -90,9 +98,11 @@ def runn(env, steps):
             print ()
         if terminated or truncated:
             break
-        hip_l = math.sin(ii * 0.1)
-        # print (hip_l)
-        controller.goto('hip_l', hip_l)
+
+        hip_l = math.sin(ii * speed + hip_l_phase) * hip_range
+        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range
+        # controller.goto('hip_l', hip_l)
+        # controller.goto('hip_r', hip_r)
     return ii
 
 def train(env, steps, epochs):
