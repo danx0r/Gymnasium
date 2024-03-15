@@ -53,7 +53,7 @@ class Controller:
     #     (0, 0),   #foot_l
     #     ]
 
-    GAIN = .9
+    GAIN = 1
     PDvals = [
         (-.9*GAIN, -0.12*GAIN),   #knee_l
         (-.9*GAIN, -0.084*GAIN),   #knee_l
@@ -127,7 +127,7 @@ def runn(env, steps, adjust=None):
         if terminated or truncated:
             break
         
-        if ii==500:
+        if ii==800:
             controller.adjust_gain(adjust)
 
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
