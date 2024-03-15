@@ -91,11 +91,11 @@ def runn(env, steps):
     hip_range = 0.27
     hip_l_phase = math.pi / 2
     hip_r_phase = -math.pi / 2
-    knee_range = 0.5
+    knee_range = 0.56
     knee_l_phase = -math.pi / 2
     knee_r_phase = math.pi / 2
     foot_range = 0.22
-    foot_offset = 0.121
+    foot_offset = 0.125
     foot_l_phase = math.pi / 2
     foot_r_phase = -math.pi / 2
 
@@ -115,6 +115,8 @@ def runn(env, steps):
             print ()
         if terminated or truncated:
             break
+        
+        speed = 0.032 + observation[1] * 0.012 + observation[10] * -0.0004
 
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range
         controller.goto('hip_l', hip_l)
@@ -128,6 +130,7 @@ def runn(env, steps):
         controller.goto('foot_l', foot_l)
         foot_r = math.sin(ii * speed + foot_r_phase) * foot_range + foot_offset
         controller.goto('foot_r', foot_r)
+
     return ii
 
 def train(env, steps, epochs):
