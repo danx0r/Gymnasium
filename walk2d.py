@@ -53,14 +53,14 @@ class Controller:
     #     (0, 0),   #foot_l
     #     ]
 
-    GAIN = 1.2
+    GAIN = 1.
     PDvals = [
-        (-.75*GAIN, -0.1*GAIN),   #knee_l
-        (-.75*GAIN, -0.07*GAIN),   #knee_l
-        (-.75*GAIN, -0.07*GAIN),   #knee_l
-        (-.75*GAIN, -0.1*GAIN),   #knee_l
-        (-.75*GAIN, -0.07*GAIN),   #knee_l
-        (-.75*GAIN, -0.07*GAIN),   #knee_l
+        (-.9*GAIN, -0.12*GAIN),   #knee_l
+        (-.9*GAIN, -0.084*GAIN),   #knee_l
+        (-.9*GAIN, -0.084*GAIN),   #knee_l
+        (-.9*GAIN, -0.12*GAIN),   #knee_l
+        (-.9*GAIN, -0.084*GAIN),   #knee_l
+        (-.9*GAIN, -0.084*GAIN),   #knee_l
         ]
 
     joints = {
