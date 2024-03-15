@@ -151,10 +151,12 @@ if __name__ == "__main__":
     SHOW = args.show
     if args.train:
         env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=True)
+        env._max_episode_steps=args.steps
         err = train(env, args.steps, args.epochs)
         print ("ERROR:", err)
     else:
         env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=False)
+        env._max_episode_steps=args.steps
         observation, info = env.reset()
         time.sleep(2)
         runn(env, args.steps)
