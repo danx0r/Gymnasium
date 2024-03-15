@@ -53,7 +53,7 @@ class Controller:
     #     (0, 0),   #foot_l
     #     ]
 
-    GAIN = 1
+    GAIN = .9
     PDvals = [
         (-.9*GAIN, -0.12*GAIN),   #knee_l
         (-.9*GAIN, -0.084*GAIN),   #knee_l
@@ -95,7 +95,7 @@ class Controller:
             s.P *= adj
             s.D *= adj
  
-def runn(env, steps):
+def runn(env, steps, adjust=None):
     speed = 0.031
     hip_range = 0.4
     hip_offset = 0.1
@@ -128,7 +128,7 @@ def runn(env, steps):
             break
         
         if ii==500:
-            controller.adjust_gain(1.2)
+            controller.adjust_gain(adjust)
 
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
         controller.goto('hip_l', hip_l)
@@ -145,8 +145,8 @@ def runn(env, steps):
 
     return ii
 
-def train(env, steps, epochs):
-    error = runn(env, steps)
+def train(env, steps, epochs, adjust=None):
+    error = runn(env, steps, adjust)
     return error
 
 if __name__ == "__main__":
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
-    parser.add_argument("--learnrate", type=float, default=0.0001)
+    parser.add_argument("--adjust", type=float, default=1.)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     args = parser.parse_args()
@@ -164,12 +164,12 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        err = train(env, args.steps, args.epochs)
+        err = train(env, args.steps, args.epochs, args.adjust)
         print ("ERROR:", err)
     else:
         env = gym.make("Walker2d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=False)
         env._max_episode_steps=args.steps
         observation, info = env.reset()
         time.sleep(2)
-        runn(env, args.steps)
+        runn(env, args.steps, args.adjust)
         env.close()
