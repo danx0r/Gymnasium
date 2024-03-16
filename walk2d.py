@@ -96,7 +96,7 @@ class Controller:
             s.D *= adj
  
 def runn(env, steps, adjust=None):
-    speed = 0.031
+    speed = 0.032
     hip_range = 0.4
     hip_offset = 0.1
     hip_l_phase = math.pi / 2
