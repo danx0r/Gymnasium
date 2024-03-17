@@ -88,5 +88,5 @@ if __name__ == "__main__":
                 best_D = D
                 print (f"new best P={best_P} D={best_D} error={error}")
 
-    print (f"best P={best_P} D={best_D} error={best}")
+        print (f"best P={best_P} D={best_D} error={best}")
     env.close()
