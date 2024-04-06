@@ -173,7 +173,8 @@ class Walker2dEnv(MujocoEnv, utils.EzPickle):
 
     def __init__(
         self,
-        xml_file: str = "walker2d_v5.xml",
+#        xml_file: str = "walker2d_v5.xml",
+        xml_file: str = "stompy.urdf",
         frame_skip: int = 4,
         default_camera_config: Dict[str, Union[float, int]] = DEFAULT_CAMERA_CONFIG,
         forward_reward_weight: float = 1.0,
