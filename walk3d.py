@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
     VERBOSE = args.verbose
     SHOW = args.show
-    gym.register("Walker3d-v5", entry_point='gymnasium.envs.mujoco.walker3d_v5:Walker2dEnv')
+    gym.register("Walker3d-v5", entry_point='gymnasium.envs.mujoco.walker3d_v5:Walker3dEnv')
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
