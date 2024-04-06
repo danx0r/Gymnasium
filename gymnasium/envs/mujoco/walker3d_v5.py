@@ -17,7 +17,7 @@ DEFAULT_CAMERA_CONFIG = {
 }
 
 
-class Walker2dEnv(MujocoEnv, utils.EzPickle):
+class Walker3dEnv(MujocoEnv, utils.EzPickle):
     r"""
     ## Description
     This environment builds on the [hopper](https://gymnasium.farama.org/environments/mujoco/hopper/) environment by adding another set of legs that allow the robot to walk forward instead of hop.
