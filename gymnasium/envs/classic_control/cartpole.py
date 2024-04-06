@@ -265,7 +265,7 @@ class CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
             from pygame import gfxdraw
         except ImportError as e:
             raise DependencyNotInstalled(
-                "pygame is not installed, run `pip install gymnasium[classic-control]`"
+                'pygame is not installed, run `pip install "gymnasium[classic-control]"`'
             ) from e
 
         if self.screen is None:
@@ -365,10 +365,13 @@ class CartPoleVectorEnv(VectorEnv):
 
     def __init__(
         self,
+        sutton_barto_reward: bool = False,
         num_envs: int = 2,
         max_episode_steps: int = 500,
         render_mode: Optional[str] = None,
     ):
+        self._sutton_barto_reward = sutton_barto_reward
+
         self.num_envs = num_envs
         self.max_episode_steps = max_episode_steps
         self.render_mode = render_mode
@@ -466,7 +469,10 @@ class CartPoleVectorEnv(VectorEnv):
 
         truncated = self.steps >= self.max_episode_steps
 
-        reward = np.ones_like(terminated, dtype=np.float32)
+        if self._sutton_barto_reward is False:
+            reward = np.ones_like(terminated, dtype=np.float32)
+        elif self._sutton_barto_reward is True:
+            reward = -np.array(terminated, dtype=np.float32)
 
         # Reset all environments which terminated or were truncated in the last step
         self.state[:, self.prev_done] = self.np_random.uniform(
@@ -522,7 +528,7 @@ class CartPoleVectorEnv(VectorEnv):
             from pygame import gfxdraw
         except ImportError:
             raise DependencyNotInstalled(
-                "pygame is not installed, run `pip install gymnasium[classic_control]`"
+                'pygame is not installed, run `pip install "gymnasium[classic_control]"`'
             )
 
         if self.screens is None:

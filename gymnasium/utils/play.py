@@ -18,7 +18,7 @@ try:
     from pygame.event import Event
 except ImportError as e:
     raise gym.error.DependencyNotInstalled(
-        "pygame is not installed, run `pip install gymnasium[classic-control]`"
+        'pygame is not installed, run `pip install "gymnasium[classic_control]"`'
     ) from e
 
 try:
@@ -27,7 +27,7 @@ try:
     matplotlib.use("TkAgg")
     import matplotlib.pyplot as plt
 except ImportError:
-    logger.warn("matplotlib is not installed, run `pip install gymnasium[other]`")
+    logger.warn('matplotlib is not installed, run `pip install "gymnasium[other]"`')
     matplotlib, plt = None, None
 
 
@@ -206,6 +206,8 @@ def play(
         noop: The action used when no key input has been entered, or the entered key combination is unknown.
 
     Example:
+        >>> import gymnasium as gym
+        >>> import numpy as np
         >>> from gymnasium.utils.play import play
         >>> play(gym.make("CarRacing-v2", render_mode="rgb_array"),  # doctest: +SKIP
         ...     keys_to_action={
@@ -356,7 +358,7 @@ class PlayPlot:
 
         if plt is None:
             raise DependencyNotInstalled(
-                "matplotlib is not installed, run `pip install gymnasium[other]`"
+                'matplotlib is not installed, run `pip install "gymnasium[other]"`'
             )
 
         num_plots = len(self.plot_names)
@@ -409,6 +411,6 @@ class PlayPlot:
 
         if plt is None:
             raise DependencyNotInstalled(
-                "matplotlib is not installed, run `pip install gymnasium[other]`"
+                'matplotlib is not installed, run `pip install "gymnasium[other]"`'
             )
         plt.pause(0.000001)

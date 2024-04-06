@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import operator as op
 import typing
-from collections import OrderedDict
 from functools import reduce, singledispatch
 from typing import Any, TypeVar, Union, cast
 
@@ -201,7 +200,7 @@ def _flatten_dict(space: Dict, x: dict[str, Any]) -> dict[str, Any] | NDArray[An
         return np.concatenate(
             [np.array(flatten(s, x[key])) for key, s in space.spaces.items()]
         )
-    return OrderedDict((key, flatten(s, x[key])) for key, s in space.spaces.items())
+    return {key: flatten(s, x[key]) for key, s in space.spaces.items()}
 
 
 @flatten.register(Graph)
@@ -361,16 +360,15 @@ def _unflatten_dict(space: Dict, x: NDArray[Any] | dict[str, Any]) -> dict[str, 
     if space.is_np_flattenable:
         dims = np.asarray([flatdim(s) for s in space.spaces.values()], dtype=np.int_)
         list_flattened = np.split(x, np.cumsum(dims[:-1]))
-        return OrderedDict(
-            [
-                (key, unflatten(s, flattened))
-                for flattened, (key, s) in zip(list_flattened, space.spaces.items())
-            ]
-        )
+        return {
+            key: unflatten(s, flattened)
+            for flattened, (key, s) in zip(list_flattened, space.spaces.items())
+        }
+
     assert isinstance(
         x, dict
     ), f"{space} is not numpy-flattenable. Thus, you should only unflatten dictionary for this space. Got a {type(x)}"
-    return OrderedDict((key, unflatten(s, x[key])) for key, s in space.spaces.items())
+    return {key: unflatten(s, x[key]) for key, s in space.spaces.items()}
 
 
 @unflatten.register(Graph)
@@ -423,7 +421,7 @@ def _unflatten_sequence(space: Sequence, x: tuple[Any, ...]) -> tuple[Any, ...] 
 
 @unflatten.register(OneOf)
 def _unflatten_oneof(space: OneOf, x: NDArray[Any]) -> tuple[int, Any]:
-    idx = int(x[0])
+    idx = np.int64(x[0])
     sub_space = space.spaces[idx]
 
     original_size = flatdim(sub_space)
@@ -532,9 +530,7 @@ def _flatten_space_dict(space: Dict) -> Box | Dict:
             dtype=np.result_type(*[s.dtype for s in space_list]),
         )
     return Dict(
-        spaces=OrderedDict(
-            (key, flatten_space(space)) for key, space in space.spaces.items()
-        )
+        spaces={key: flatten_space(space) for key, space in space.spaces.items()}
     )
 
 
