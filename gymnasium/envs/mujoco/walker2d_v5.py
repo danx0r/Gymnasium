@@ -12,7 +12,7 @@ from gymnasium.spaces import Box
 DEFAULT_CAMERA_CONFIG = {
     "trackbodyid": 2,
     "distance": 4.0,
-    "lookat": np.array((0.0, 0.0, 1.15)),
+    "lookat": np.array((1.0, 0.0, 1.15)),
     "elevation": -20.0,
 }
 
@@ -186,6 +186,7 @@ class Walker2dEnv(MujocoEnv, utils.EzPickle):
         exclude_current_positions_from_observation: bool = True,
         **kwargs,
     ):
+        print ("DEBUG GYM", default_camera_config)
         utils.EzPickle.__init__(
             self,
             xml_file,
