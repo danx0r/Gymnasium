@@ -13,7 +13,7 @@ DEFAULT_CAMERA_CONFIG = {
     "trackbodyid": 2,
     "distance": 4.0,
     "elevation": -10.0,
-    "lookat": np.array((0.0, 0.0, -1)),
+    "lookat": np.array((0.0, 0.0, -0.5)),
 }
 
 
