@@ -171,7 +171,7 @@
     <geom conaffinity="1" condim="3" name="floor" pos="0 0 -2" rgba="0.8 0.9 0.8 1" size="40 40 40" type="plane" material="MatPlane"/>
     <body>
       <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rootx" pos="0 0 -1.25" stiffness="0" type="slide"/>
-      <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 -1.25" ref="1.25" stiffness="0" type="slide"/>
+      <!-- <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 -1.25" ref="1.25" stiffness="0" type="slide"/> -->
       <joint armature="0" axis="0 1 0" damping="0" limited="false" name="rooty" pos="0 0 0" stiffness="0" type="hinge"/>
       <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.615686 0.811765 0.929412 0.501961" mesh="torso_1_top_torso_1"/>
       <geom type="mesh" rgba="0.615686 0.811765 0.929412 0.501961" mesh="torso_1_top_torso_1"/>
@@ -623,9 +623,9 @@
       </body>
     </body>
   </worldbody>
-    <actuator>
+  <actuator>
     <!-- <motor joint="torso_joint" ctrlrange="-100.0 100.0" isctrllimited="true"/>-->
-    <motor ctrllimited="true" ctrlrange="-1.0 1.0" gear="100" joint="joint_legs_1_right_leg_1_knee_revolute"/>
+    <motor ctrllimited="true" ctrlrange="-1.0 1.0" gear="100" joint="joint_legs_1_left_leg_1_knee_revolute"/>
     <!-- <motor joint="finger2_rot" ctrlrange="-20.0 20.0" isctrllimited="true"/>-->
   </actuator>
 
