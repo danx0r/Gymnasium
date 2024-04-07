@@ -116,10 +116,14 @@ def runn(env, steps, adjust=None):
     controller.goto('hip_l', .25)
     controller.goto('hip_r', .25)
     observation, info = env.reset()
-
+    testact = -.4
     for ii in range(steps):
+        print ("STEP:", ii)
+        if ii==200:
+            # controller.adjust_gain(adjust)
+            testact = 1
         # action = controller.update(observation)
-        action = [0]
+        action = [testact]
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
@@ -127,9 +131,6 @@ def runn(env, steps, adjust=None):
         if terminated or truncated:
             break
         
-        if ii==800:
-            controller.adjust_gain(adjust)
-
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
         controller.goto('hip_l', hip_l)
         hip_r = math.sin(ii * speed + hip_r_phase) * hip_range + hip_offset
