@@ -164,7 +164,7 @@ class BaseMujocoEnv(gym.Env[NDArray[np.float64], NDArray[np.float32]]):
         # Check control input is contained in the action space
         if np.array(ctrl).shape != (self.model.nu,):
             raise ValueError(
-                f"Action dimension mismatch. Expected {(self.model.nu,)}, found {np.array(ctrl).shape}"
+                f"Action dimension mismatch(1). Expected {(self.model.nu,)}, found {np.array(ctrl).shape}"
             )
         self._step_mujoco_simulation(ctrl, n_frames)
 
@@ -227,10 +227,12 @@ class MujocoEnv(BaseMujocoEnv):
         self,
     ) -> Tuple["mujoco._structs.MjModel", "mujoco._structs.MjData"]:
         model = mujoco.MjModel.from_xml_path(self.fullpath)
+        print ("DEBUG initsim model.nu:", model.nu)
         # MjrContext will copy model.vis.global_.off* to con.off*
         model.vis.global_.offwidth = self.width
         model.vis.global_.offheight = self.height
         data = mujoco.MjData(model)
+        print ("DEBUG initsim model.nu:", model.nu, "data:", data)
         return model, data
 
     def set_state(self, qpos, qvel):

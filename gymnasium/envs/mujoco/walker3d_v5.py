@@ -173,8 +173,8 @@ class Walker3dEnv(MujocoEnv, utils.EzPickle):
 
     def __init__(
         self,
-#        xml_file: str = "walker2d_v5.xml",
-        xml_file: str = "stompy.urdf",
+        # xml_file: str = "walker3d_v5.xml",
+        xml_file: str = "stompy.xml",
         frame_skip: int = 4,
         default_camera_config: Dict[str, Union[float, int]] = DEFAULT_CAMERA_CONFIG,
         forward_reward_weight: float = 1.0,
@@ -187,7 +187,6 @@ class Walker3dEnv(MujocoEnv, utils.EzPickle):
         exclude_current_positions_from_observation: bool = True,
         **kwargs,
     ):
-        print ("DEBUG GYM", default_camera_config)
         utils.EzPickle.__init__(
             self,
             xml_file,
