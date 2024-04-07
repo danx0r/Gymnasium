@@ -12,8 +12,8 @@ from gymnasium.spaces import Box
 DEFAULT_CAMERA_CONFIG = {
     "trackbodyid": 2,
     "distance": 4.0,
-    "lookat": np.array((1.0, 0.0, 1.15)),
-    "elevation": -20.0,
+    "elevation": -10.0,
+    "lookat": np.array((0.0, 0.0, -1)),
 }
 
 
