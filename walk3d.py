@@ -118,12 +118,9 @@ def runn(env, steps, adjust=None):
     observation, info = env.reset()
 
     for ii in range(steps):
-        action = controller.update(observation)
-        print ("DEBUG act:", action)
-        action = action[:1]
+        # action = controller.update(observation)
+        action = [0]
         observation, reward, terminated, truncated, info = env.step(action)
-        print ("DEBUG obs:", observation)
-        # print ("DEBUG", terminated, truncated)
         if VERBOSE & 1:
             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
             print ()
