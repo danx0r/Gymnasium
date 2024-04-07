@@ -116,12 +116,12 @@ def runn(env, steps, adjust=None):
     controller.goto('hip_l', .25)
     controller.goto('hip_r', .25)
     observation, info = env.reset()
-    testact = -.4
+    testact = 1
     for ii in range(steps):
         print ("STEP:", ii)
         if ii==200:
             # controller.adjust_gain(adjust)
-            testact = 1
+            testact = -1
         # action = controller.update(observation)
         action = [testact]
         observation, reward, terminated, truncated, info = env.step(action)
