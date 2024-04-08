@@ -13,7 +13,7 @@ from torch import nn
 # See README.txt
 #
 
-NUM_SERVOS = 10
+NUM_SERVOS = 12
 
 class Servo:
     def __init__(self, P, D, name):
@@ -34,6 +34,7 @@ class Controller:
     PGAIN = 10
     DGAIN = 1
     PDvals = [
+        (-PGAIN, -DGAIN),
         (-PGAIN, -DGAIN),
         (-PGAIN, -DGAIN),
         (-PGAIN, -DGAIN),
@@ -109,11 +110,11 @@ def runn(env, steps, adjust=None):
 
     for ii in range(steps):
         print ("STEP:", ii)
-        action = controller.update(observation)
-        # if ii < 400:
-        #     action = [-3]
-        # else:
-        #     action = [3]
+        # action = controller.update(observation)
+        if ii < 400:
+            action = [-3]
+        else:
+            action = [3]
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
