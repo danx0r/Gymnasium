@@ -13,7 +13,7 @@ DEFAULT_CAMERA_CONFIG = {
     "trackbodyid": 2,
     "distance": 4.0,
     "elevation": -10.0,
-    "lookat": np.array((0.0, 0.0, -0.5)),
+    "lookat": np.array((0.0, 0.0, -0.)),
 }
 
 
@@ -184,7 +184,7 @@ class Walker3dEnv(MujocoEnv, utils.EzPickle):
         healthy_z_range: Tuple[float, float] = (0.8, 2.0),
         healthy_angle_range: Tuple[float, float] = (-1.0, 1.0),
         reset_noise_scale: float = 5e-3,
-        exclude_current_positions_from_observation: bool = True,
+        exclude_current_positions_from_observation: bool = False,
         **kwargs,
     ):
         utils.EzPickle.__init__(
