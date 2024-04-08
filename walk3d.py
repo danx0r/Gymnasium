@@ -112,9 +112,9 @@ def runn(env, steps, adjust=None):
         print ("STEP:", ii)
         # action = controller.update(observation)
         if ii < 400:
-            action = [-3]
+            action = [-3] * 12
         else:
-            action = [3]
+            action = [3] * 12
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
