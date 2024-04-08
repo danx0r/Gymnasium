@@ -123,7 +123,7 @@ def runn(env, steps, adjust=None):
             # controller.adjust_gain(adjust)
             testact = -1
         # action = controller.update(observation)
-        action = [testact]
+        action = [1, testact, -1, -testact, -testact, testact, 1, -1, 1, -1]
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
             print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)

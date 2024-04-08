@@ -35,8 +35,8 @@ ankle:
         joint_legs_1_left_leg_1_ankle_revolute
         1 = extended (high heels/ballet); -1 contracted (walk on heels)
 
-    lright:
-        joint_legs_1_left_leg_1_ankle_revolute
+    right:
+        joint_legs_1_right_leg_1_ankle_revolute
         1 = contracted (walk on heels); -1 = extended (tippytoe)
 
 foot:
@@ -46,5 +46,5 @@ foot:
         -1 = contracted (foot rolled towards instep)
     right:
         joint_legs_1_right_leg_1_x4_1_dof_x4
-        1 = extended (foot rolled outward, away from centerline)
-        -1 = contracted (foot rolled towards instep)
+        1 = contracted (foot rolled towards instep)
+        -1 = extended (foot rolled outward, away from centerline)
