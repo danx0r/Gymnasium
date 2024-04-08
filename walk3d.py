@@ -34,29 +34,32 @@ class Controller:
     PGAIN = 10
     DGAIN = 1
     PDvals = [
-        (-PGAIN, -DGAIN),   #hip L1
-        (-PGAIN, -DGAIN),   #hip L2
-        (-PGAIN, -DGAIN),   #hip R1
-        (-PGAIN, -DGAIN),   #hip R2
-        (-PGAIN, -DGAIN),  #knee_L
-        (-PGAIN, -DGAIN),  #knee_R
-        (-PGAIN, -DGAIN),   #ankle L
-        (-PGAIN, -DGAIN),  #ankle_R
-        (-PGAIN, -DGAIN),  #foot L
-        (-PGAIN, -DGAIN),  #foot_R
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
+        (-PGAIN, -DGAIN),
         ]
 
     joints = {
-        'hip_l1': 0,
-        'hip_l2': 1,
-        'hip_r1': 2,
-        'hip_r2': 3,
-        'knee_l': 4,
-        'knee_r': 5,
-        'ankle_l': 6,
-        'anlke_r': 7,
-        'foot_l': 8,
-        'foot_r': 9,
+        'hip_lx': 0,
+        'hip_lz': 1,
+        'hip_ly': 2,
+        'hip_rx': 3,
+        'hip_rz': 4,
+        'hip_ry': 5,
+        'knee_l': 6,
+        'knee_r': 7,
+        'ankle_l': 8,
+        'anlke_r': 9,
+        'foot_l': 10,
+        'foot_r': 11,
     }
 
     def __init__(self):
