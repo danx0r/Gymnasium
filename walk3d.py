@@ -59,13 +59,16 @@ def runn(env, steps, adjust=None):
     # foot_r_phase = -math.pi / 2
 
     controller = Controller()
+    for j in controller.joints.keys():
+        controller.goto(j, -2)
     observation, info = env.reset()
 
     for ii in range(steps):
         print ("STEP:", ii, end="")
         action = controller.update(observation)
         if ii == 250:
-            controller.goto('hip_lx', 1)
+            for j in controller.joints.keys():
+                controller.goto(j, 2)
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
             print (" ACTION:", action, "\nOBSERVATION:\n", observation[-74:-62])
