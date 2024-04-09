@@ -13,41 +13,9 @@ from torch import nn
 # See README.txt
 #
 
-NUM_SERVOS = 1
-
-class Servo:
-    def __init__(self, P, D, name):
-        self.P = P
-        self.D = D
-        self.target = 0.0
-        self.name = name
-
-    def goto(self, target):
-        self.target = target
-
-    def update(self, pos, vel):
-        perr = pos-self.target
-        torque = perr * self.P + vel * self.D
-        return torque        
+NUM_ACTUATORS = 1
 
 class Controller:
-    PGAIN = 1.3
-    DGAIN = PGAIN * 0.3
-    PDvals = [
-        (-PGAIN, DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        # (-PGAIN, -DGAIN),
-        ]
-
     joints = {
         'hip_lx': 0,
         # 'hip_lz': 1,
@@ -64,28 +32,17 @@ class Controller:
     }
 
     def __init__(self):
-        self.servos = [None] * NUM_SERVOS
-        self.act = [0] * NUM_SERVOS
-        for i in range(NUM_SERVOS):
-            self.servos[i] = Servo(self.PDvals[i][0], self.PDvals[i][1], list(self.joints.keys())[i])
+        self.act = [0] * NUM_ACTUATORS
     
     def update(self, obs):
-        for i in range(NUM_SERVOS):
-            pos = obs[23]
-            vel = obs[34+23]
-            self.act[i] = self.servos[i].update(pos, vel)
+        #
+        # MAGIC goes here -- update actions based on observations
+        #
         return self.act
 
     def goto(self, joint, target):
-        self.servos[self.joints[joint]].goto(target)
+        self.act[self.joints[joint]] = target
 
-    def adjust_gain(self, adj):
-        if VERBOSE & 2:
-            print ("adjust gain:", adj)
-        for s in self.servos:
-            s.P *= adj
-            s.D *= adj
- 
 def runn(env, steps, adjust=None):
     # speed = 0.032
     # hip_range = 0.4
@@ -103,27 +60,18 @@ def runn(env, steps, adjust=None):
 
     controller = Controller()
     controller.goto('hip_lx', -1)
-    # controller.goto('foot_l', .03)
-    # controller.goto('foot_r', .02)
-    # controller.goto('hip_l', .25)
-    # controller.goto('hip_r', .25)
     observation, info = env.reset()
 
     for ii in range(steps):
-        print ("STEP:", ii)
-        # action = controller.update(observation)
-        action = [.5]
-        if ii >= 400:
-            action = [-.5]
-            # controller.goto('hip_lx', .5)
+        print ("STEP:", ii, end="")
+        action = controller.update(observation)
+        if ii == 250:
+            controller.goto('hip_lx', 1)
         observation, reward, terminated, truncated, info = env.step(action)
-        if len(observation) < 74:                                              
-            print ("WARNING: incorrect observation length -- should  be >= 74")
-        else:
-            observation = observation[-74:]
         if VERBOSE & 1:
-            print (ii, "ACTION:", action, "OBSERVATION:", observation[23], observation[34+23])
-            # print ()
+            print ("ACTION:", action, "OBSERVATION:", observation[23])
+        else:
+            print()
         if terminated or truncated:
             break
         
