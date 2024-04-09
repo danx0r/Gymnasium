@@ -65,14 +65,15 @@ def runn(env, steps, adjust=None):
     bugg = 0
     for ii in range(steps):
         action = controller.update(observation)
-        if ii == 150 * (bugg+1):
+        if ii == 100 * (bugg+3):
             j = list(controller.joints.keys())[bugg]
             print (f"MODIFY joint: {bugg} {j}")
             controller.goto(j, 2)
             bugg += 1
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
-            print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", observation[-74:-62])
+            print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
+                   f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
         if terminated or truncated:
             break
         
