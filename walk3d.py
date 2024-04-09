@@ -13,22 +13,22 @@ from torch import nn
 # See README.txt
 #
 
-NUM_ACTUATORS = 1
+NUM_ACTUATORS = 12
 
 class Controller:
     joints = {
-        'hip_lx': 0,
-        # 'hip_lz': 1,
-        # 'hip_ly': 2,
-        # 'hip_rx': 3,
-        # 'hip_rz': 4,
-        # 'hip_ry': 5,
-        # 'knee_l': 6,
-        # 'knee_r': 7,
-        # 'ankle_l': 8,
-        # 'anlke_r': 9,
-        # 'foot_l': 10,
-        # 'foot_r': 11,
+        'hip_rx': 0,
+        'hip_rz': 1,
+        'hip_ry': 2,
+        'knee_r': 3,
+        'anlke_r': 4,
+        'foot_r': 5,
+        'hip_lx': 6,
+        'hip_lz': 7,
+        'hip_ly': 8,
+        'knee_l': 9,
+        'ankle_l': 10,
+        'foot_l': 11,
     }
 
     def __init__(self):
@@ -59,7 +59,6 @@ def runn(env, steps, adjust=None):
     # foot_r_phase = -math.pi / 2
 
     controller = Controller()
-    controller.goto('hip_lx', -1)
     observation, info = env.reset()
 
     for ii in range(steps):
@@ -69,7 +68,7 @@ def runn(env, steps, adjust=None):
             controller.goto('hip_lx', 1)
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
-            print ("ACTION:", action, "OBSERVATION:", observation[23])
+            print (" ACTION:", action, "\nOBSERVATION:\n", observation[-74:-62])
         else:
             print()
         if terminated or truncated:
