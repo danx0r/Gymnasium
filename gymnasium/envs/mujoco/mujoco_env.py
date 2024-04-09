@@ -17,7 +17,7 @@ except ImportError as e:
     ) from e
 
 
-DEFAULT_SIZE = 960
+DEFAULT_SIZE = 932
 
 
 def expand_model_path(model_path: str) -> str:

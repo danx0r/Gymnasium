@@ -638,7 +638,7 @@
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_right_leg_1_x4_1_dof_x4"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_x8_2_dof_x8"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x8_1_dof_x8"/>
-    <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x10_2_dof_x10"/>
+    <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x10_1_dof_x10"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_knee_revolute"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_ankle_revolute"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x4_1_dof_x4"/>

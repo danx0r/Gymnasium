@@ -24,7 +24,7 @@ except ImportError as e:
 # The code is duplicated instead of imported for it to be working in standalone and independent
 # of the further development of the maintained mujoco_env.py
 # noinspection DuplicatedCode
-DEFAULT_SIZE = 480
+DEFAULT_SIZE = 932
 
 
 # noinspection DuplicatedCode
