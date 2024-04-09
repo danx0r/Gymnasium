@@ -111,9 +111,11 @@ def runn(env, steps, adjust=None):
 
     for ii in range(steps):
         print ("STEP:", ii)
-        action = controller.update(observation)
-        if ii == 400:
-            controller.goto('hip_lx', .5)
+        # action = controller.update(observation)
+        action = [.5]
+        if ii >= 400:
+            action = [-.5]
+            # controller.goto('hip_lx', .5)
         observation, reward, terminated, truncated, info = env.step(action)
         if len(observation) < 74:                                              
             print ("WARNING: incorrect observation length -- should  be >= 74")
