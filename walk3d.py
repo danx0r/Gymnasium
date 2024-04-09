@@ -57,19 +57,20 @@ def runn(env, steps, adjust=None):
     # foot_offset = .14
     # foot_l_phase = math.pi / 2
     # foot_r_phase = -math.pi / 2
+    restpose = [-0.5, -0.5, -0.916, -0.001, 0.0, 0.0, 0.5, -0.5, 0.916, 0.001, 0.0, 0.0]
 
     controller = Controller()
-    for j in controller.joints.keys():
-        controller.goto(j, -2)
+    for i, j in enumerate(controller.joints.keys()):
+        controller.goto(j, restpose[i])
     observation, info = env.reset()
     bugg = 0
     for ii in range(steps):
         action = controller.update(observation)
-        if ii == 100 * (bugg+3):
-            j = list(controller.joints.keys())[bugg]
-            print (f"MODIFY joint: {bugg} {j}")
-            controller.goto(j, 2)
-            bugg += 1
+        # if ii == 100 * (bugg+3):
+        #     j = list(controller.joints.keys())[bugg]
+        #     print (f"MODIFY joint: {bugg} {j}")
+        #     controller.goto(j, 2)
+        #     bugg += 1
         observation, reward, terminated, truncated, info = env.step(action)
         if VERBOSE & 1:
             print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
