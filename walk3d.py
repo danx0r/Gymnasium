@@ -111,14 +111,18 @@ def runn(env, steps, adjust=None):
     for ii in range(steps):
         print ("STEP:", ii)
         # action = controller.update(observation)
-        if ii < 400:
-            action = [-3] * 12
+        if ii < 200:
+            action = [0]
         else:
-            action = [3] * 12
+            action = [0.01]
         observation, reward, terminated, truncated, info = env.step(action)
+        if len(observation) < 74:                                              
+            print ("WARNING: incorrect observation length -- should  be >= 74")
+        else:
+            observation = observation[-74:]
         if VERBOSE & 1:
-            print (ii, "OBSERVATION:", observation[:5], "\nACTION:", action)
-            print ()
+            print (ii, "ACTION:", action, "OBSERVATION:", observation[25])
+            # print ()
         if terminated or truncated:
             break
         
