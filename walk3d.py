@@ -13,7 +13,7 @@ from torch import nn
 # See README.txt
 #
 
-NUM_SERVOS = 12
+NUM_SERVOS = 1
 
 class Servo:
     def __init__(self, P, D, name):
@@ -31,36 +31,36 @@ class Servo:
         return torque        
 
 class Controller:
-    PGAIN = 10
-    DGAIN = 1
+    PGAIN = 1.3
+    DGAIN = PGAIN * 0.3
     PDvals = [
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
-        (-PGAIN, -DGAIN),
+        (-PGAIN, DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
+        # (-PGAIN, -DGAIN),
         ]
 
     joints = {
         'hip_lx': 0,
-        'hip_lz': 1,
-        'hip_ly': 2,
-        'hip_rx': 3,
-        'hip_rz': 4,
-        'hip_ry': 5,
-        'knee_l': 6,
-        'knee_r': 7,
-        'ankle_l': 8,
-        'anlke_r': 9,
-        'foot_l': 10,
-        'foot_r': 11,
+        # 'hip_lz': 1,
+        # 'hip_ly': 2,
+        # 'hip_rx': 3,
+        # 'hip_rz': 4,
+        # 'hip_ry': 5,
+        # 'knee_l': 6,
+        # 'knee_r': 7,
+        # 'ankle_l': 8,
+        # 'anlke_r': 9,
+        # 'foot_l': 10,
+        # 'foot_r': 11,
     }
 
     def __init__(self):
@@ -71,8 +71,8 @@ class Controller:
     
     def update(self, obs):
         for i in range(NUM_SERVOS):
-            pos = 0
-            vel = 0
+            pos = obs[23]
+            vel = obs[34+23]
             self.act[i] = self.servos[i].update(pos, vel)
         return self.act
 
@@ -102,6 +102,7 @@ def runn(env, steps, adjust=None):
     # foot_r_phase = -math.pi / 2
 
     controller = Controller()
+    controller.goto('hip_lx', -1)
     # controller.goto('foot_l', .03)
     # controller.goto('foot_r', .02)
     # controller.goto('hip_l', .25)
@@ -110,18 +111,16 @@ def runn(env, steps, adjust=None):
 
     for ii in range(steps):
         print ("STEP:", ii)
-        # action = controller.update(observation)
-        if ii < 200:
-            action = [0]
-        else:
-            action = [0.01]
+        action = controller.update(observation)
+        if ii == 400:
+            controller.goto('hip_lx', .5)
         observation, reward, terminated, truncated, info = env.step(action)
         if len(observation) < 74:                                              
             print ("WARNING: incorrect observation length -- should  be >= 74")
         else:
             observation = observation[-74:]
         if VERBOSE & 1:
-            print (ii, "ACTION:", action, "OBSERVATION:", observation[25])
+            print (ii, "ACTION:", action, "OBSERVATION:", observation[23], observation[34+23])
             # print ()
         if terminated or truncated:
             break
