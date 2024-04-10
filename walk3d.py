@@ -46,11 +46,12 @@ class Controller:
 def runn(env, steps, adjust=None):
     speed = 0.03
     hip_range = 0.35
-    hip_roffset = -0.9
-    # hip_l_phase = math.pi / 2
+    hip_r_offset = -0.4
     hip_r_phase = -math.pi / 2
+    hip_l_offset = 0.4
+    hip_l_phase = -math.pi / 2
     knee_range = 0.5
-    knee_offset = 0.5
+    knee_offset = 0.7
     # knee_l_phase = -math.pi / 2
     knee_r_phase = 0
     # foot_range = 0.25
@@ -78,9 +79,9 @@ def runn(env, steps, adjust=None):
         if terminated or truncated:
             break
         
-        # hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
-        # controller.goto('hip_l', hip_l)
-        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range + hip_roffset
+        hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_l_offset
+        controller.goto('hip_ly', hip_l)
+        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range + hip_r_offset
         controller.goto('hip_ry', hip_r)
         # knee_l = math.sin(ii * speed + knee_l_phase) * knee_range + knee_offset
         # controller.goto('knee_l', knee_l)
