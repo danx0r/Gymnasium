@@ -44,9 +44,9 @@ class Controller:
         self.act[self.joints[joint]] = target
 
 def runn(env, steps, adjust=None):
-    speed = 0.06
+    speed = 0.03
     hip_range = 0.35
-    hip_offset = -0.9
+    hip_roffset = -0.9
     # hip_l_phase = math.pi / 2
     hip_r_phase = -math.pi / 2
     knee_range = 0.5
@@ -80,7 +80,7 @@ def runn(env, steps, adjust=None):
         
         # hip_l = math.sin(ii * speed + hip_l_phase) * hip_range + hip_offset
         # controller.goto('hip_l', hip_l)
-        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range + hip_offset
+        hip_r = math.sin(ii * speed + hip_r_phase) * hip_range + hip_roffset
         controller.goto('hip_ry', hip_r)
         # knee_l = math.sin(ii * speed + knee_l_phase) * knee_range + knee_offset
         # controller.goto('knee_l', knee_l)
