@@ -83,18 +83,19 @@ def runn(env, steps, adjust=None):
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
         # print ("DEBUG joint position:", env.env.env.data.joint("joint_legs_1_right_leg_1_x8_1_dof_x8").qpos[0])
 
-        hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
-        controller.goto('hip_ly', hip_l)
-        hip_r = math.sin(ii * speed + hip_r_phase) * hip_r_range + hip_r_offset
-        controller.goto('hip_ry', hip_r)
-        knee_l = math.sin(ii * speed + knee_l_phase) * knee_l_range + knee_l_offset
-        controller.goto('knee_l', knee_l)
-        knee_r = math.sin(ii * speed + knee_r_phase) * knee_r_range + knee_r_offset
-        controller.goto('knee_r', knee_r)
-        # foot_l = math.sin(ii * speed + foot_l_phase) * foot_range + foot_offset
-        # controller.goto('foot_l', foot_l)
-        # foot_r = math.sin(ii * speed + foot_r_phase) * foot_range + foot_offset
-        # controller.goto('foot_r', foot_r)
+        if ii > 60:
+            hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
+            controller.goto('hip_ly', hip_l)
+            hip_r = math.sin(ii * speed + hip_r_phase) * hip_r_range + hip_r_offset
+            controller.goto('hip_ry', hip_r)
+            knee_l = math.sin(ii * speed + knee_l_phase) * knee_l_range + knee_l_offset
+            controller.goto('knee_l', knee_l)
+            knee_r = math.sin(ii * speed + knee_r_phase) * knee_r_range + knee_r_offset
+            controller.goto('knee_r', knee_r)
+            # foot_l = math.sin(ii * speed + foot_l_phase) * foot_range + foot_offset
+            # controller.goto('foot_l', foot_l)
+            # foot_r = math.sin(ii * speed + foot_r_phase) * foot_range + foot_offset
+            # controller.goto('foot_r', foot_r)
 
     return ii
 
