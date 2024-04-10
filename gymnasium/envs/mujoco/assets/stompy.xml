@@ -445,7 +445,10 @@
       </body>
       <body name="link_torso_1_x8_1_inner_1" pos="-1.4863e-05 0.0326678 -0.267689" quat="-1 -4.64102e-08 0 0">
         <inertial pos="0 0.102953 -0.0995946" quat="0.250456 0.661265 0.250456 0.661265" mass="1.82904" diaginertia="0.0163921 0.0134978 0.00521708"/>
-        <joint name="joint_torso_1_x8_1_dof_x8" pos="0 0 0" axis="0 0 1" range="-0.785398 0.785398"/>
+
+        <!-- comment this joint out to avoid pelvic swivel-->
+        <!-- <joint name="joint_torso_1_x8_1_dof_x8" pos="0 0 0" axis="0 0 1" range="-0.785398 0.785398"/> -->
+        
         <geom type="mesh" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="torso_1_x8_1_inner_1"/>
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="torso_1_x8_1_inner_1"/>
         <geom pos="0 -0.0155 -0.033" quat="-2.32051e-08 1 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.615686 0.811765 0.929412 0.501961" mesh="legs_1_hips_1"/>
