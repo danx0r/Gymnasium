@@ -76,12 +76,13 @@ def runn(env, steps, adjust=None):
         #     controller.goto(j, 2)
         #     bugg += 1
         observation, reward, terminated, truncated, info = env.step(action)
+        if terminated or truncated:
+            break
         if VERBOSE & 1:
             print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
-        if terminated or truncated:
-            break
-        
+        # print ("DEBUG joint position:", env.env.env.data.joint("joint_legs_1_right_leg_1_x8_1_dof_x8").qpos[0])
+
         hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
         controller.goto('hip_ly', hip_l)
         hip_r = math.sin(ii * speed + hip_r_phase) * hip_r_range + hip_r_offset
