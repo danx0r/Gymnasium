@@ -21,7 +21,7 @@ class Controller:
         'hip_rz': 1,
         'hip_ry': 2,
         'knee_r': 3,
-        'anlke_r': 4,
+        'ankle_r': 4,
         'foot_r': 5,
         'hip_lx': 6,
         'hip_lz': 7,
@@ -57,7 +57,7 @@ def runn(env, steps, adjust=None):
     # foot_offset = .14
     # foot_l_phase = math.pi / 2
     # foot_r_phase = -math.pi / 2
-    restpose = [-0.5, -0.5, -0.916, -0.001, 0.0, 0.0, 0.5, -0.5, 0.916, 0.001, 0.0, 0.0]
+    restpose = [-0.4, -0.5, -0.916, -0.001, 0.0, 0.22, 0.4, -0.5, 0.916, 0.001, 0.0, 0.22]
 
     controller = Controller()
     for i, j in enumerate(controller.joints.keys()):
