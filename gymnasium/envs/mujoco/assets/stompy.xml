@@ -171,9 +171,9 @@
     <geom conaffinity="1" condim="3" name="floor" pos="0 0 -1.5" rgba="0.8 0.9 0.8 1" size="40 40 40" type="plane" material="MatPlane"/>
     <body pos ="0 0 -.3" quat="1 0 0 1">
 
-      <joint armature="0" axis="0 1 -.02" damping="0" limited="false" name="rootx" pos="0 0 -1.25" stiffness="0" type="slide"/>
+      <!-- <joint armature="0" axis="0 1 -.02" damping="0" limited="false" name="rootx" pos="0 0 -1.25" stiffness="0" type="slide"/> -->
  
-      <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 -1.25" ref="1.25" stiffness="0" type="slide"/>
+      <!-- <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 -1.25" ref="1.25" stiffness="0" type="slide"/> -->
  
       <!-- <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rooty" pos="0 0 0" stiffness="0" type="hinge"/> -->
  
@@ -645,6 +645,8 @@
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_knee_revolute"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_ankle_revolute"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x4_1_dof_x4"/>
+    <position inheritrange="1" kp="100" kv="7" joint="joint_right_arm_1_x8_1_dof_x8"/>
+    <position inheritrange="1" kp="100" kv="7" joint="joint_left_arm_2_x8_1_dof_x8"/>
   </actuator>
 
 </mujoco>
