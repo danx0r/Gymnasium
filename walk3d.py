@@ -13,7 +13,7 @@ from torch import nn
 # See README.txt
 #
 
-NUM_ACTUATORS = 12
+NUM_ACTUATORS = 14
 
 class Controller:
     joints = {
@@ -29,6 +29,8 @@ class Controller:
         'knee_l': 9,
         'ankle_l': 10,
         'foot_l': 11,
+        'shoulder_l': 12,
+        'shoulder_r': 13,
     }
 
     def __init__(self):
@@ -61,7 +63,7 @@ def runn(env, steps, adjust=None):
     # foot_offset = .14
     # foot_l_phase = math.pi / 2
     # foot_r_phase = -math.pi / 2
-    restpose = [-0.45, -0.5, -0.916, -0.001, 0.0, 0.22, 0.45, -0.5, 0.916, 0.001, 0.0, -0.22]
+    restpose = [-0.45, -0.5, -0.916, -0.001, 0.0, 0.22, 0.45, -0.5, 0.916, 0.001, 0.0, -0.22, 1.8, -1.8]
 
     controller = Controller()
     for i, j in enumerate(controller.joints.keys()):
@@ -81,7 +83,7 @@ def runn(env, steps, adjust=None):
         if VERBOSE & 1:
             print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
-        # print ("DEBUG joint position:", env.env.env.data.joint("joint_legs_1_right_leg_1_x8_1_dof_x8").qpos[0])
+        print ("DEBUG joint position:", env.env.env.data.joint("joint_left_arm_2_x8_1_dof_x8").qpos[0])
 
         if ii > 60:
             hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
