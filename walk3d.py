@@ -1,13 +1,14 @@
 import time
 import math
-import sys
-import random
+# import sys
+# import random
 import argparse
-import pickle
+# import pickle
 import gymnasium as gym
-import numpy as np
-import torch
-from torch import nn
+from gymnasium.utils.save_video import save_video
+# import numpy as np
+# import torch
+# from torch import nn
 
 #
 # See README.txt
@@ -70,6 +71,7 @@ def runn(env, steps, adjust=None):
         controller.goto(j, restpose[i])
     observation, info = env.reset()
     bugg = 0
+    frames = []
     for ii in range(steps):
         action = controller.update(observation)
         # if ii == 100 * (bugg+3):
@@ -99,6 +101,12 @@ def runn(env, steps, adjust=None):
             # foot_r = math.sin(ii * speed + foot_r_phase) * foot_range + foot_offset
             # controller.goto('foot_r', foot_r)
 
+        if RECORDING:
+            frames.append(env.render())
+
+    if RECORDING:
+        print (f"SAVING {len(frames)} frames of video")
+        save_video(frames, "videos", fps=env.metadata["render_fps"])
     return ii
 
 def train(env, steps, epochs, adjust=None):
@@ -113,18 +121,20 @@ if __name__ == "__main__":
     parser.add_argument("--adjust", type=float, default=1.)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
+    parser.add_argument("--record", action="store_true")
     args = parser.parse_args()
 
     VERBOSE = args.verbose
     SHOW = args.show
+    RECORDING = args.record
     gym.register("Walker3d-v5", entry_point='gymnasium.envs.mujoco.walker3d_v5:Walker3dEnv')
     if args.train:
-        env = gym.make("Walker3d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=True)
+        env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
         err = train(env, args.steps, args.epochs, args.adjust)
         print ("ERROR:", err)
     else:
-        env = gym.make("Walker3d-v5", render_mode="human" if SHOW else None, terminate_when_unhealthy=False)
+        env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False)
         env._max_episode_steps=args.steps
         observation, info = env.reset()
         time.sleep(2)
