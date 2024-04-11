@@ -46,7 +46,7 @@ class Controller:
         self.act[self.joints[joint]] = target
 
 def runn(env, steps, adjust=None):
-    speed = 0.03
+    speed = 0.032
     hip_l_range = 0.35
     hip_r_range = 0.35
     hip_r_offset = -0.4
