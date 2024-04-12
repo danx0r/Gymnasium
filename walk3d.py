@@ -47,20 +47,22 @@ class Controller:
     def goto(self, joint, target):
         self.act[self.joints[joint]] = target
 
-def runn(env, steps, adjust=None):
+def runn(env, steps, params=None):
+    if params:
+        HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP = params
     speed = 0.04
     hip_l_range = 0.34
     hip_r_range = 0.34
-    hip_r_offset = -0.56
     hip_l_offset = 0.56
-    hip_r_phase = -math.pi / 2
+    hip_r_offset = -0.56
     hip_l_phase = -math.pi / 2
+    hip_r_phase = -math.pi / 2
     knee_l_range = 0.5
     knee_r_range = 0.5
-    knee_r_offset = 0.7
-    knee_r_phase = 0
     knee_l_offset = -0.7
+    knee_r_offset = 0.7
     knee_l_phase = 0
+    knee_r_phase = 0
     # foot_range = 0.25
     # foot_offset = .14
     # foot_l_phase = math.pi / 2
@@ -95,20 +97,26 @@ def runn(env, steps, adjust=None):
         print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
 
         if ii > 80:
-            hip_l_range = hip_r_range = 0.36 + trop * 1.44 + trov * 0.2
-
-            hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
+            if params:
+                PD = trop + trov * DAMP
+                speed_use = speed + SPEED_ADJ * PD
+                hip_l_range_use =  hip_l_range + HIPRANGE_ADJ * PD
+                hip_r_range_use =  hip_r_range + HIPRANGE_ADJ * PD
+                hip_l_offset_use =  hip_l_offset + HIPOFFSET_ADJ * PD
+                hip_r_offset_use =  hip_r_offset - HIPOFFSET_ADJ * PD
+            else:
+                hip_l_range_use = hip_l_range
+                hip_r_range_use = hip_r_range
+                hip_l_offset_use = hip_l_offset
+                hip_r_offset_use = hip_r_offset
+            hip_l = math.sin(ii * speed_use + hip_l_phase) * hip_l_range_use + hip_l_offset_use
             controller.goto('hip_ly', hip_l)
-            hip_r = math.sin(ii * speed + hip_r_phase) * hip_r_range + hip_r_offset
+            hip_r = math.sin(ii * speed_use + hip_r_phase) * hip_r_range_use + hip_r_offset_use
             controller.goto('hip_ry', hip_r)
-            knee_l = math.sin(ii * speed + knee_l_phase) * knee_l_range + knee_l_offset
+            knee_l = math.sin(ii * speed_use + knee_l_phase) * knee_l_range + knee_l_offset
             controller.goto('knee_l', knee_l)
-            knee_r = math.sin(ii * speed + knee_r_phase) * knee_r_range + knee_r_offset
+            knee_r = math.sin(ii * speed_use + knee_r_phase) * knee_r_range + knee_r_offset
             controller.goto('knee_r', knee_r)
-            # foot_l = math.sin(ii * speed + foot_l_phase) * foot_range + foot_offset
-            # controller.goto('foot_l', foot_l)
-            # foot_r = math.sin(ii * speed + foot_r_phase) * foot_range + foot_offset
-            # controller.goto('foot_r', foot_r)
 
         if RECORDING:
             frames.append(env.render())
@@ -118,8 +126,8 @@ def runn(env, steps, adjust=None):
         save_video(frames, "videos", fps=env.metadata["render_fps"])
     return ii
 
-def train(env, steps, epochs, adjust=None):
-    error = runn(env, steps, adjust)
+def train(env, steps, epochs, params=None, ):
+    error = runn(env, steps, params)
     return error
 
 if __name__ == "__main__":
@@ -130,7 +138,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
-    parser.add_argument("--adjust", type=float, default=1.)
+    parser.add_argument("--params", type=float, default=1.)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
@@ -143,12 +151,12 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        err = train(env, args.steps, args.epochs, args.adjust)
+        err = train(env, args.steps, args.epochs, args.params)
         print ("ERROR:", err)
     else:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False)
         env._max_episode_steps=args.steps
         observation, info = env.reset(seed=SEED)
         time.sleep(2)
-        runn(env, args.steps, args.adjust)
+        runn(env, args.steps, args.params)
         # env.close()
