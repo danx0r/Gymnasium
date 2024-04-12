@@ -89,9 +89,12 @@ def runn(env, steps, adjust=None):
         if VERBOSE & 1:
             print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
+        trop = env.env.env.data.joint("rooty").qpos[0]
+        trov = env.env.env.data.joint("rooty").qvel[0]
         print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
 
         if ii > 80:
+            hip_l_range = hip_r_range = 0.34 + trop * 0.1
             hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
             controller.goto('hip_ly', hip_l)
             hip_r = math.sin(ii * speed + hip_r_phase) * hip_r_range + hip_r_offset
