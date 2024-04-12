@@ -129,13 +129,26 @@ def runn(env, steps, params=None):
 
 def train(env, steps, epochs, params=None):
     total = 0
+    best = 0
+    best_params = None
+    randomize = not params
     for i in range(epochs):
-        error = runn(env, steps, params)
-        print (f"TRAINED epoch: {i} loss: {error}")
-        total += error
+        if randomize:
+            params = []
+            for j in range(4):
+                params.append(random.gauss(0, .2))
+            print ("  RANDOM params:", params)
+        else:
+            params = args.params
+        score = runn(env, steps, params)
+        if score > best:
+            best = score
+            best_params = params
+        print (f"  TRAINED epoch: {i} loss: {score} best loss: {best} best params:{best_params}")
+        total += score
     average = total / (i+1)
     print (f"TRAINING DONE average loss: {average}")
-    return average
+    return best, best_params
 
 if __name__ == "__main__":
     SEED = 123
@@ -158,8 +171,8 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        err = train(env, args.steps, args.epochs, args.params)
-        print ("ERROR:", err)
+        score, params = train(env, args.steps, args.epochs, args.params)
+        print ("TOP SCORE:", score, "TOP PARAMETERS:", params)
     else:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False)
         env._max_episode_steps=args.steps
