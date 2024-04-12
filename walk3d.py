@@ -89,7 +89,7 @@ def runn(env, steps, adjust=None):
         if VERBOSE & 1:
             print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
-        # print ("DEBUG joint position:", env.env.env.data.joint("joint_left_arm_2_x8_1_dof_x8").qpos[0])
+        print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
 
         if ii > 80:
             hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
