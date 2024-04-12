@@ -128,8 +128,14 @@ def runn(env, steps, params=None):
     return ii
 
 def train(env, steps, epochs, params=None):
-    error = runn(env, steps, params)
-    return error
+    total = 0
+    for i in range(epochs):
+        error = runn(env, steps, params)
+        print (f"TRAINED epoch: {i} loss: {error}")
+        total += error
+    average = total / (i+1)
+    print (f"TRAINING DONE average loss: {average}")
+    return average
 
 if __name__ == "__main__":
     SEED = 123
