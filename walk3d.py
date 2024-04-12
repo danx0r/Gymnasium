@@ -47,9 +47,9 @@ class Controller:
         self.act[self.joints[joint]] = target
 
 def runn(env, steps, adjust=None):
-    speed = 0.032
-    hip_l_range = 0.35
-    hip_r_range = 0.35
+    speed = 0.038
+    hip_l_range = 0.33
+    hip_r_range = 0.33
     hip_r_offset = -0.4
     hip_r_phase = -math.pi / 2
     hip_l_offset = 0.4
@@ -79,6 +79,10 @@ def runn(env, steps, adjust=None):
         #     print (f"MODIFY joint: {bugg} {j}")
         #     controller.goto(j, 2)
         #     bugg += 1
+        if ii == 50:
+            env.env.env.data.body("root").xfrc_applied[0]=500
+        if ii == 66:
+            env.env.env.data.body("root").xfrc_applied[0]=0
         observation, reward, terminated, truncated, info = env.step(action)
         if terminated or truncated:
             break
@@ -87,7 +91,7 @@ def runn(env, steps, adjust=None):
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
         # print ("DEBUG joint position:", env.env.env.data.joint("joint_left_arm_2_x8_1_dof_x8").qpos[0])
 
-        if ii > 60:
+        if ii > 80:
             hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
             controller.goto('hip_ly', hip_l)
             hip_r = math.sin(ii * speed + hip_r_phase) * hip_r_range + hip_r_offset
@@ -139,4 +143,4 @@ if __name__ == "__main__":
         observation, info = env.reset()
         time.sleep(2)
         runn(env, args.steps, args.adjust)
-        env.close()
+        # env.close()
