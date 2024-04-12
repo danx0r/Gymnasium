@@ -1,12 +1,13 @@
 import time
 import math
 # import sys
-# import random
+import random
 import argparse
 # import pickle
 import gymnasium as gym
 from gymnasium.utils.save_video import save_video
 # import numpy as np
+from numpy import random as np_random
 # import torch
 # from torch import nn
 
@@ -69,7 +70,7 @@ def runn(env, steps, adjust=None):
     controller = Controller()
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
-    observation, info = env.reset()
+    observation, info = env.reset(seed=SEED)
     bugg = 0
     frames = []
     for ii in range(steps):
@@ -122,6 +123,9 @@ def train(env, steps, epochs, adjust=None):
     return error
 
 if __name__ == "__main__":
+    SEED = 123
+    np_random.seed(SEED)
+    random.seed(SEED)
     parser = argparse.ArgumentParser()
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
@@ -144,7 +148,7 @@ if __name__ == "__main__":
     else:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False)
         env._max_episode_steps=args.steps
-        observation, info = env.reset()
+        observation, info = env.reset(seed=SEED)
         time.sleep(2)
         runn(env, args.steps, args.adjust)
         # env.close()
