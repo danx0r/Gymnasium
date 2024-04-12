@@ -94,10 +94,10 @@ def runn(env, steps, params=None):
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
         trop = env.env.env.data.joint("rooty").qpos[0]
         trov = env.env.env.data.joint("rooty").qvel[0]
-        print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
+        # print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
 
         if ii > 80:
-            if params:
+            if params is not None:
                 PD = trop + trov * DAMP
                 speed_use = speed + SPEED_ADJ * PD
                 hip_l_range_use =  hip_l_range + HIPRANGE_ADJ * PD
@@ -105,6 +105,7 @@ def runn(env, steps, params=None):
                 hip_l_offset_use =  hip_l_offset + HIPOFFSET_ADJ * PD
                 hip_r_offset_use =  hip_r_offset - HIPOFFSET_ADJ * PD
             else:
+                speed_use = speed
                 hip_l_range_use = hip_l_range
                 hip_r_range_use = hip_r_range
                 hip_l_offset_use = hip_l_offset
@@ -126,7 +127,7 @@ def runn(env, steps, params=None):
         save_video(frames, "videos", fps=env.metadata["render_fps"])
     return ii
 
-def train(env, steps, epochs, params=None, ):
+def train(env, steps, epochs, params=None):
     error = runn(env, steps, params)
     return error
 
@@ -138,7 +139,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
-    parser.add_argument("--params", type=float, default=1.)
+    parser.add_argument("--params", type = float, nargs=4)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
