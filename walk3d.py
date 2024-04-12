@@ -47,9 +47,9 @@ class Controller:
         self.act[self.joints[joint]] = target
 
 def runn(env, steps, adjust=None):
-    speed = 0.038
-    hip_l_range = 0.33
-    hip_r_range = 0.33
+    speed = 0.04
+    hip_l_range = 0.34
+    hip_r_range = 0.34
     hip_r_offset = -0.4
     hip_r_phase = -math.pi / 2
     hip_l_offset = 0.4
@@ -80,7 +80,7 @@ def runn(env, steps, adjust=None):
         #     controller.goto(j, 2)
         #     bugg += 1
         if ii == 50:
-            env.env.env.data.body("root").xfrc_applied[0]=500
+            env.env.env.data.body("root").xfrc_applied[0]=498
         if ii == 66:
             env.env.env.data.body("root").xfrc_applied[0]=0
         observation, reward, terminated, truncated, info = env.step(action)
