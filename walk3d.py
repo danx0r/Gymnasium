@@ -50,9 +50,9 @@ def runn(env, steps, adjust=None):
     speed = 0.04
     hip_l_range = 0.34
     hip_r_range = 0.34
-    hip_r_offset = -0.4
+    hip_r_offset = -0.56
+    hip_l_offset = 0.56
     hip_r_phase = -math.pi / 2
-    hip_l_offset = 0.4
     hip_l_phase = -math.pi / 2
     knee_l_range = 0.5
     knee_r_range = 0.5
@@ -80,7 +80,7 @@ def runn(env, steps, adjust=None):
         #     controller.goto(j, 2)
         #     bugg += 1
         if ii == 50:
-            env.env.env.data.body("root").xfrc_applied[0]=498
+            env.env.env.data.body("root").xfrc_applied[0]=510
         if ii == 66:
             env.env.env.data.body("root").xfrc_applied[0]=0
         observation, reward, terminated, truncated, info = env.step(action)
@@ -94,7 +94,7 @@ def runn(env, steps, adjust=None):
         print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
 
         if ii > 80:
-            hip_l_range = hip_r_range = 0.4 + trop * 0.75
+            hip_l_range = hip_r_range = 0.36 + trop * 1.44 + trov * 0.2
 
             hip_l = math.sin(ii * speed + hip_l_phase) * hip_l_range + hip_l_offset
             controller.goto('hip_ly', hip_l)
