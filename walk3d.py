@@ -127,7 +127,7 @@ def runn(env, steps, params=None):
         save_video(frames, "videos", fps=env.metadata["render_fps"])
     return ii
 
-def train(env, steps, epochs, params=None):
+def train(env, steps, epochs, params=None, temp=0.2):
     total = 0
     best = 0
     best_params = None
@@ -136,7 +136,7 @@ def train(env, steps, epochs, params=None):
         if randomize:
             params = []
             for j in range(4):
-                params.append(random.gauss(0, .2))
+                params.append(random.gauss(0, temp))
             print ("  RANDOM params:", params)
         else:
             params = args.params
@@ -162,6 +162,7 @@ if __name__ == "__main__":
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
+    parser.add_argument("--temp", type = float, default=0.1)
     args = parser.parse_args()
 
     VERBOSE = args.verbose
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        score, params = train(env, args.steps, args.epochs, args.params)
+        score, params = train(env, args.steps, args.epochs, args.params, args.temp)
         print ("TOP SCORE:", score, "TOP PARAMETERS:", params)
     else:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False)
