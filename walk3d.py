@@ -138,8 +138,6 @@ def train(env, steps, epochs, params=None, temp=0.2):
             for j in range(4):
                 params.append(random.gauss(0, temp))
             print ("  RANDOM params:", params)
-        else:
-            params = args.params
         score = runn(env, steps, params)
         if score > best:
             best = score
@@ -172,7 +170,8 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        score, params = train(env, args.steps, args.epochs, args.params, args.temp)
+        params = (0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563)
+        score, params = train(env, args.steps, args.epochs, params, args.temp)
         print ("TOP SCORE:", score, "TOP PARAMETERS:", params)
     else:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False)
