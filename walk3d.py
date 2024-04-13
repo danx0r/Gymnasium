@@ -166,7 +166,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
-    parser.add_argument("--params", type = float, nargs=2)
+    parser.add_argument("--params", type = float, nargs=6)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
@@ -181,8 +181,8 @@ if __name__ == "__main__":
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
         params = [0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563, -0.02959531227935735, -0.1356344752907]
-        # if args.params:
-        #     params += args.params
+        if args.params:
+            params = args.params
         score, params = train(env, args.steps, args.epochs, params, args.temp)
         print ("TOP SCORE:", score, "TOP PARAMETERS:", params)
     else:
