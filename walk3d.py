@@ -60,10 +60,10 @@ def runn(env, steps, params=None):
     hip_r_offset = -0.56
     hip_l_phase = -math.pi / 2
     hip_r_phase = -math.pi / 2
-    knee_l_range = 0.5
-    knee_r_range = 0.5
-    knee_l_offset = -0.6
-    knee_r_offset = 0.6
+    knee_l_range = 0.45
+    knee_r_range = 0.45
+    knee_l_offset = -0.62
+    knee_r_offset = 0.62
     knee_l_phase = 0
     knee_r_phase = 0
     # foot_range = 0.25
@@ -138,11 +138,11 @@ def train(env, steps, epochs, params=None, temp=0.2):
     best = 0
     best_params = None
     for i in range(epochs):
-        if params and len(params)==4:
-            params += [0, 0]
-            for j in range(6):
-                params[j] += random.gauss(0, temp if j>=4 else temp*.3)
-            print ("  RANDOM params:", params)
+        # if params and len(params)==4:
+        #     params += [0, 0]
+        #     for j in range(6):
+        #         params[j] += random.gauss(0, temp if j>=4 else temp*.3)
+        #     print ("  RANDOM params:", params)
         time_score = runn(env, steps, params)
         score = env.env.env.data.joint("rootx").qpos[0]
         if score > best:
@@ -177,9 +177,9 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        params = [0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563]
-        if args.params:
-            params += args.params
+        params = [0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563, -0.02959531227935735, -0.1356344752907]
+        # if args.params:
+        #     params += args.params
         score, params = train(env, args.steps, args.epochs, params, args.temp)
         print ("TOP SCORE:", score, "TOP PARAMETERS:", params)
     else:
