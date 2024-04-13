@@ -99,7 +99,8 @@ def runn(env, steps, params=None):
         trov = env.env.env.data.joint("rooty").qvel[0]
         tpov = env.env.env.data.joint("rootx").qvel[0]
         tpac = env.env.env.data.joint("rootx").qacc[0]
-        # print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
+        if VERBOSE and 2:
+            print (f'{ii} trop {trop} trov {trov} tpov {tpov} tpac {tpac}')
 
         if ii > 80:
             if params is not None:
@@ -138,15 +139,16 @@ def train(env, steps, epochs, params=None, temp=0.2):
     best_params = None
     for i in range(epochs):
         if params and len(params)==4:
-            for j in range(2):
-                params.append(random.gauss(0, temp))
-            print ("  RANDOM params:", params[4:])
+            params += [0, 0]
+            for j in range(6):
+                params[j] += random.gauss(0, temp if j>=4 else temp*.3)
+            print ("  RANDOM params:", params)
         time_score = runn(env, steps, params)
         score = env.env.env.data.joint("rootx").qpos[0]
         if score > best:
             best = score
             best_params = params
-        print (f"  TRAINED epoch: {i} score: {score} best {best} best params:{best_params}")
+        print (f"  TRAINED epoch: {i} score {score} steps {time_score} best {best} best params:{best_params}")
         total += score
         params = params[:4]
     average = total / (i+1)
