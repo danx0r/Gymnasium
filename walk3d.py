@@ -49,7 +49,10 @@ class Controller:
 
 def runn(env, steps, params=None):
     if params:
-        HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP = params
+        if len(params) == 6:
+            HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP, TORSO_LIN_ADJ, DAMP2 = params
+        else:
+            HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP = params
     speed = 0.04
     hip_l_range = 0.34
     hip_r_range = 0.34
@@ -94,11 +97,13 @@ def runn(env, steps, params=None):
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
         trop = env.env.env.data.joint("rooty").qpos[0]
         trov = env.env.env.data.joint("rooty").qvel[0]
+        tpov = env.env.env.data.joint("rootx").qvel[0]
+        tpac = env.env.env.data.joint("rootx").qacc[0]
         # print (f'DEBUG rotational position: {env.env.env.data.joint("rooty").qpos[0]} rotational velocity: {env.env.env.data.joint("rooty").qvel[0]}')
 
         if ii > 80:
             if params is not None:
-                PD = trop + trov * DAMP
+                PD = trop + trov * DAMP + tpov * TORSO_LIN_ADJ + tpac * TORSO_LIN_ADJ * DAMP2
                 speed_use = speed + SPEED_ADJ * PD
                 hip_l_range_use =  hip_l_range + HIPRANGE_ADJ * PD
                 hip_r_range_use =  hip_r_range + HIPRANGE_ADJ * PD
@@ -131,19 +136,19 @@ def train(env, steps, epochs, params=None, temp=0.2):
     total = 0
     best = 0
     best_params = None
-    randomize = not params
     for i in range(epochs):
-        if randomize:
-            params = []
-            for j in range(4):
+        if params and len(params)==4:
+            for j in range(2):
                 params.append(random.gauss(0, temp))
-            print ("  RANDOM params:", params)
-        score = runn(env, steps, params)
+            print ("  RANDOM params:", params[4:])
+        time_score = runn(env, steps, params)
+        score = env.env.env.data.joint("rootx").qpos[0]
         if score > best:
             best = score
             best_params = params
-        print (f"  TRAINED epoch: {i} loss: {score} best loss: {best} best params:{best_params}")
+        print (f"  TRAINED epoch: {i} score: {score} best {best} best params:{best_params}")
         total += score
+        params = params[:4]
     average = total / (i+1)
     print (f"TRAINING DONE average loss: {average}")
     return best, best_params
@@ -156,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
-    parser.add_argument("--params", type = float, nargs=4)
+    parser.add_argument("--params", type = float, nargs=2)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
@@ -170,7 +175,9 @@ if __name__ == "__main__":
     if args.train:
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
-        params = (0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563)
+        params = [0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563]
+        if args.params:
+            params += args.params
         score, params = train(env, args.steps, args.epochs, params, args.temp)
         print ("TOP SCORE:", score, "TOP PARAMETERS:", params)
     else:
