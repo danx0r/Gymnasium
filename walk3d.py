@@ -133,24 +133,27 @@ def runn(env, steps, params=None):
         save_video(frames, "videos", fps=env.metadata["render_fps"])
     return ii
 
-def train(env, steps, epochs, params=None, temp=0.2):
+def train(env, steps, epochs, params, temp=0.2):
     total = 0
     best = 0
     best_params = None
     for i in range(epochs):
-        # if params and len(params)==4:
-        #     params += [0, 0]
-        #     for j in range(6):
-        #         params[j] += random.gauss(0, temp if j>=4 else temp*.3)
-        #     print ("  RANDOM params:", params)
+        save_params = list(params)
+        for j in range(6):
+            params[j] += random.gauss(0, temp)
+        print ("  RANDOMIZED params:", params)
         time_score = runn(env, steps, params)
         score = env.env.env.data.joint("rootx").qpos[0]
         if score > best:
+            print ("  NEW BEST:", score)
             best = score
-            best_params = params
+            best_params = list(params)
+            save_params = params   # now search from new best
+        temp *=.999
         print (f"  TRAINED epoch: {i} score {score} steps {time_score} best {best} best params:{best_params}")
         total += score
-        params = params[:4]
+        params = save_params
+
     average = total / (i+1)
     print (f"TRAINING DONE average loss: {average}")
     return best, best_params
