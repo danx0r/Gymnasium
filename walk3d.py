@@ -134,6 +134,7 @@ def runn(env, steps, params=None):
     return ii
 
 def train(env, steps, epochs, params, temp=0.2):
+    global SEED
     total = 0
     best = 0
     best_params = None
@@ -142,8 +143,15 @@ def train(env, steps, epochs, params, temp=0.2):
         for j in range(6):
             params[j] += random.gauss(0, temp)
         print ("  RANDOMIZED params:", params)
-        time_score = runn(env, steps, params)
-        score = env.env.env.data.joint("rootx").qpos[0]
+        score = 999999
+        random.seed(time.time()*1000)
+        for k in range(3):          #take worst of 3
+            params[4] += random.gauss(0, .00001)                 # Inject some entropy
+            time_score = runn(env, steps, params)
+            score1 = env.env.env.data.joint("rootx").qpos[0]
+            print ("    SCORE of 3:", score1)
+            if score1 < score:
+                score = score1 
         if score > best:
             print ("  NEW BEST:", score)
             best = score
