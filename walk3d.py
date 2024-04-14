@@ -181,7 +181,8 @@ if __name__ == "__main__":
         env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
         env._max_episode_steps=args.steps
         # params = [0.017067031188683163, -0.04814661919150587, 0.1881971449088442, 0.06434891577610563, -0.02959531227935735, -0.1356344752907]
-        params = [0.46738074710995087, 0.18755609697877074, 0.1447729465363447, 0.051735984228104714, -0.0019730518044992814, -0.6056803832497429]
+        params = [0.7154389233615354, -0.13465742540463885, 0.1647139466597792, 0.015743438166364233, -0.0020600278158888225, -0.40959288976093666]
+
         if args.params:
             params = args.params
         score, params = train(env, args.steps, args.epochs, params, args.temp)
