@@ -156,10 +156,10 @@ def train(env, steps, epochs, params, temp=0.2):
             params[4] += random.gauss(0, .00001)                 # Inject some entropy
             time_score = runn(env, steps, params)
             score1 = env.env.env.data.joint("rootx").qpos[0]
+            print ("    SCORE of 3:", score1)
             if score1 < best:
                 score = score1
                 break
-            print ("    SCORE of 3:", score1)
             if score1 < score:
                 score = score1 
         if score > best:
@@ -197,7 +197,7 @@ if __name__ == "__main__":
     if args.params:
         params = args.params
     else:
-        params = [0.7154389233615354, -0.13465742540463885, 0.1647139466597792, 0.015743438166364233, 0, -0.4]
+        params = [0.7154389233615354, -0.13465742540463885, 0.1647139466597792, 0.015743438166364233, 0.036960511142429694, 0.01629851169066194]
 
     VERBOSE = args.verbose
     SHOW = args.show
