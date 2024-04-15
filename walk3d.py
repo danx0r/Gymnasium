@@ -156,6 +156,9 @@ def train(env, steps, epochs, params, temp=0.2):
             params[4] += random.gauss(0, .00001)                 # Inject some entropy
             time_score = runn(env, steps, params)
             score1 = env.env.env.data.joint("rootx").qpos[0]
+            if score1 < best:
+                score = score1
+                break
             print ("    SCORE of 3:", score1)
             if score1 < score:
                 score = score1 
@@ -164,9 +167,9 @@ def train(env, steps, epochs, params, temp=0.2):
             best = score
             best_params = list(params)
             save_params = params   # now search from new best
-            temp *= 2
+            temp *= 10
         else:
-            temp *= 0.99
+            temp *= 0.9
         print (f"  TRAINED epoch: {i} score {score} steps {time_score} temp: {temp} best {best} best params:{best_params}")
         total += score
         params = save_params
