@@ -47,7 +47,7 @@ class Controller:
     def goto(self, joint, target):
         self.act[self.joints[joint]] = target
 
-def runn(env, steps, params=None):
+def runn(env, steps, params=None, quit_when_unhealthy=True):
     if params:
         if len(params) == 6:
             HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP, TORSO_LIN_ADJ, DAMP2 = params
@@ -95,6 +95,11 @@ def runn(env, steps, params=None):
         if VERBOSE & 1:
             print ("STEP:", ii, "ACTION:", action, "\nOBSERVATION:\n", f"{observation[-53]:7.3f} {observation[-52]:7.3f} {observation[-51]:7.3f} {observation[-49]:7.3f} {observation[-47]:7.3f} {observation[-46]:7.3f}"
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
+
+        tzpos = env.env.env.data.body("root").xpos[2]
+        if quit_when_unhealthy and tzpos < -.75:
+            break
+
         trop = env.env.env.data.joint("rooty").qpos[0]
         trov = env.env.env.data.joint("rooty").qvel[0]
         tpov = env.env.env.data.joint("rootx").qvel[0]
@@ -178,6 +183,7 @@ if __name__ == "__main__":
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
+    parser.add_argument("--no_quit", action="store_true")
     parser.add_argument("--temp", type = float, default=0.1)
     args = parser.parse_args()
 
@@ -203,5 +209,5 @@ if __name__ == "__main__":
         env._max_episode_steps=args.steps
         observation, info = env.reset(seed=SEED)
         time.sleep(2)
-        runn(env, args.steps, params)
+        runn(env, args.steps, params=params, quit_when_unhealthy=not args.no_quit)
         # env.close()
