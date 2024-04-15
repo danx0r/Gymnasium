@@ -16,6 +16,7 @@ from numpy import random as np_random
 #
 
 NUM_ACTUATORS = 14
+TARGET_VEL = 0.67
 
 class Controller:
     joints = {
@@ -97,6 +98,7 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
                    f" {observation[-45]:7.3f} {observation[-44]:7.3f} {observation[-43]:7.3f} {observation[-41]:7.3f} {observation[-40]:7.3f} {observation[-39]:7.3f}")
 
         tzpos = env.env.env.data.body("root").xpos[2]
+
         if quit_when_unhealthy and tzpos < -.75:
             break
 
@@ -105,11 +107,11 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
         tpov = env.env.env.data.joint("rootx").qvel[0]
         tpac = env.env.env.data.joint("rootx").qacc[0]
         if VERBOSE and 2:
-            print (f'{ii} trop {trop} trov {trov} tpov {tpov} tpac {tpac}')
+            print (f'{ii} trop {trop} trov {trov} tpov {tpov} tpac {tpac} tzpos {tzpos}')
 
         if ii > 80:
             if params is not None:
-                PD = trop + trov * DAMP + tpov * TORSO_LIN_ADJ + tpac * TORSO_LIN_ADJ * DAMP2
+                PD = trop + trov * DAMP + (tpov-TARGET_VEL) * TORSO_LIN_ADJ + tpac * TORSO_LIN_ADJ * DAMP2
                 speed_use = speed + SPEED_ADJ * PD
                 hip_l_range_use =  hip_l_range + HIPRANGE_ADJ * PD
                 hip_r_range_use =  hip_r_range + HIPRANGE_ADJ * PD
@@ -145,7 +147,7 @@ def train(env, steps, epochs, params, temp=0.2):
     best_params = None
     for i in range(epochs):
         save_params = list(params)
-        for j in range(6):
+        for j in range(4, 6):
             params[j] += random.gauss(0, temp)
         print ("  RANDOMIZED params:", params)
         score = 999999
@@ -162,8 +164,10 @@ def train(env, steps, epochs, params, temp=0.2):
             best = score
             best_params = list(params)
             save_params = params   # now search from new best
-        temp *=.999
-        print (f"  TRAINED epoch: {i} score {score} steps {time_score} best {best} best params:{best_params}")
+            temp *= 2
+        else:
+            temp *= 0.99
+        print (f"  TRAINED epoch: {i} score {score} steps {time_score} temp: {temp} best {best} best params:{best_params}")
         total += score
         params = save_params
 
