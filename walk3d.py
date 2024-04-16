@@ -104,7 +104,7 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
 
         trop = env.env.env.data.joint("rooty").qpos[0]
         trov = env.env.env.data.joint("rooty").qvel[0]
-        tpov = env.env.env.data.joint("rootx").qvel[0]
+        tpov = env.env.env.data.joint("rootx").qvel[0] + random.gauss(0, .01)
         tpac = env.env.env.data.joint("rootx").qacc[0]
         if VERBOSE and 2:
             print (f'{ii} trop {trop} trov {trov} tpov {tpov} tpac {tpac} tzpos {tzpos}')
