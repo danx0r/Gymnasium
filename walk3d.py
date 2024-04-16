@@ -15,7 +15,7 @@ from numpy import random as np_random
 # See README.txt
 #
 
-NUM_ACTUATORS = 14
+NUM_ACTUATORS = 16
 TARGET_VEL = 0.67
 
 class Controller:
@@ -32,8 +32,10 @@ class Controller:
         'knee_l': 9,
         'ankle_l': 10,
         'foot_l': 11,
-        'shoulder_l': 12,
-        'shoulder_r': 13,
+        'shoulder_r': 12,
+        'shoulder_rx': 13,
+        'shoulder_l': 14,
+        'shoulder_lx': 15,
     }
 
     def __init__(self):
@@ -69,14 +71,14 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     # foot_offset = .14
     # foot_l_phase = math.pi / 2
     # foot_r_phase = -math.pi / 2
-    restpose = [-0.45, -0.5, -0.916, -0.001, 0.0, 0.22, 0.45, -0.5, 0.916, 0.001, 0.0, -0.22, 1.35, -1.35]
+    restpose = [-0.45, -0.5, -0.916, -0.001, 0.0, 0.22, 0.45, -0.5, 0.916, 0.001, 0.0, -0.22, -1.57, -1.95, 1.57, 1.95]
     roll_r = restpose[0]
     roll_l = restpose[6]
     controller = Controller()
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
     observation, info = env.reset(seed=SEED)
-    phaser = math.pi * -0.232075 #massively tweaked to be just-so walk for 3-4 steps while feedback kicks in
+    phaser = math.pi * -0.18547231 #massively tweaked to be just-so walk for 3-4 steps while feedback kicks in
     frames = []
     for ii in range(steps):
         action = controller.update(observation)
