@@ -50,10 +50,8 @@ class Controller:
 
 def runn(env, steps, params=None, quit_when_unhealthy=True):
     if params:
-        if len(params) == 6:
-            HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP, TORSO_LIN_ADJ, DAMP2 = params
-        else:
-            HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP = params
+        HIPRANGE_ADJ, HIPOFFSET_ADJ, SPEED_ADJ, DAMP, TORSO_LIN_ADJ, DAMP2, ROLL_ADJ, ROLL_DAMP = params
+
     speed = 0.04
     hip_l_range = 0.34
     hip_r_range = 0.34
@@ -72,6 +70,8 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     # foot_l_phase = math.pi / 2
     # foot_r_phase = -math.pi / 2
     restpose = [-0.45, -0.5, -0.916, -0.001, 0.0, 0.22, 0.45, -0.5, 0.916, 0.001, 0.0, -0.22, 1.35, -1.35]
+    roll_r = restpose[0]
+    roll_l = restpose[6]
     controller = Controller()
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
@@ -100,6 +100,8 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
         trov = 0#env.env.env.data.joint("rooty").qvel[0]
         tpov = env.env.env.data.joint("rootx").qvel[0] + random.gauss(0, .01)
         tpac = env.env.env.data.joint("rootx").qacc[0]
+        rollp = env.env.env.data.joint("rootxh").qpos[0]
+        rollv = env.env.env.data.joint("rootxh").qvel[0]
         if VERBOSE and 2:
             print (f'{ii} trop {trop} trov {trov} tpov {tpov} tpac {tpac} tzpos {tzpos}')
         if ii > 80:
@@ -110,12 +112,16 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
                 hip_r_range_use =  hip_r_range + HIPRANGE_ADJ * PD
                 hip_l_offset_use =  hip_l_offset + HIPOFFSET_ADJ * PD
                 hip_r_offset_use =  hip_r_offset - HIPOFFSET_ADJ * PD
+                roll_r_use = roll_r + ROLL_ADJ * rollp + ROLL_DAMP * rollv
+                roll_l_use = -roll_r_use
             else:
                 speed_use = speed
                 hip_l_range_use = hip_l_range
                 hip_r_range_use = hip_r_range
                 hip_l_offset_use = hip_l_offset
                 hip_r_offset_use = hip_r_offset
+                roll_l_use = roll_l
+                roll_r_use = roll_r
             hip_l = math.sin(ii * speed_use + (hip_l_phase+phaser)) * hip_l_range_use + hip_l_offset_use
             controller.goto('hip_ly', hip_l)
             hip_r = math.sin(ii * speed_use + (hip_r_phase+phaser)) * hip_r_range_use + hip_r_offset_use
@@ -124,6 +130,8 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
             controller.goto('knee_l', knee_l)
             knee_r = math.sin(ii * speed_use + knee_r_phase+phaser) * knee_r_range + knee_r_offset
             controller.goto('knee_r', knee_r)
+            controller.goto('hip_rx', roll_r_use)
+            controller.goto('hip_lx', roll_l_use)
 
         if RECORDING:
             frames.append(env.render())
@@ -140,7 +148,7 @@ def train(env, steps, epochs, params, temp=0.2):
     best_params = None
     for i in range(epochs):
         save_params = list(params)
-        for j in range(4, 6):
+        for j in range(6, 8):
             params[j] += random.gauss(0, temp)
         print ("  RANDOMIZED params:", params)
         score = 999999
@@ -191,7 +199,7 @@ if __name__ == "__main__":
         params = args.params
     else:
         # params = [0.7154389233615354, -0.13465742540463885, 0.1647139466597792, 0.015743438166364233, 0.036960511142429694, 0.01629851169066194]
-        params = [0, 0, 0, 0, 0, 0]
+        params = [0, 0, 0, 0, 0, 0, 0, 0]
 
     VERBOSE = args.verbose
     SHOW = args.show
