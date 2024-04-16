@@ -82,10 +82,10 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     frames = []
     for ii in range(steps):
         action = controller.update(observation)
-        # if ii == 50:
-        #     env.env.env.data.body("root").xfrc_applied[0]=510
-        # if ii == 66:
-        #     env.env.env.data.body("root").xfrc_applied[0]=0
+        if ii == 50:
+            env.env.env.data.body("root").xfrc_applied[0]=504
+        if ii == 56:
+            env.env.env.data.body("root").xfrc_applied[0]=0
         observation, reward, terminated, truncated, info = env.step(action)
         if terminated or truncated:
             break
@@ -98,8 +98,8 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
         if quit_when_unhealthy and tzpos < -.75:
             break
 
-        trop = 0#env.env.env.data.joint("rooty").qpos[0]
-        trov = 0#env.env.env.data.joint("rooty").qvel[0]
+        trop = env.env.env.data.joint("rooty").qpos[0]
+        trov = env.env.env.data.joint("rooty").qvel[0]
         tpov = env.env.env.data.joint("rootx").qvel[0] + random.gauss(0, .01)
         tpac = env.env.env.data.joint("rootx").qacc[0]
         rollp = env.env.env.data.joint("rootxh").qpos[0]
@@ -203,7 +203,8 @@ if __name__ == "__main__":
         params = args.params
     else:
         # params = [0.7154389233615354, -0.13465742540463885, 0.1647139466597792, 0.015743438166364233, 0.036960511142429694, 0.01629851169066194]
-        params = [0, 0, 0, 0, 0, 0, -0.6135549660778169, 0.015221110682044438]
+        # params = [0, 0, 0, 0, 0, 0, -0.6135549660778169, 0.015221110682044438]
+        params = [0.7154389233615354, -0.13465742540463885, 0.1647139466597792, 0.015743438166364233, 0.036960511142429694, 0.01629851169066194, -0.6135549660778169, 0.015221110682044438]
 
     VERBOSE = args.verbose
     SHOW = args.show
