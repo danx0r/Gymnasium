@@ -156,7 +156,7 @@ def train(env, steps, epochs, params, temp=0.2):
         score = 999999
         random.seed(time.time()*1000)
         for k in range(3):          #take worst of 3
-            params[7] += random.gauss(0, .0001)                 # Inject some entropy
+            params[7] += random.gauss(0, .00001)                 # Inject some entropy
             time_score = runn(env, steps, params)
             score1 = env.env.env.data.joint("rootx").qpos[0]
             print ("    SCORE of 3:", score1)
