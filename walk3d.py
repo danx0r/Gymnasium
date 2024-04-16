@@ -71,8 +71,7 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     # foot_offset = .14
     # foot_l_phase = math.pi / 2
     # foot_r_phase = -math.pi / 2
-    restpose = [-0.42, -0.5, -0.916, -0.001, 0.0, 0.22, 0.52, -0.5, 0.916, 0.001, 0.0, -0.22, 1.35, -1.35]
-
+    restpose = [-0.45, -0.5, -0.916, -0.001, 0.0, 0.22, 0.45, -0.5, 0.916, 0.001, 0.0, -0.22, 1.35, -1.35]
     controller = Controller()
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
@@ -80,6 +79,8 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     bugg = 0
     frames = []
     for ii in range(steps):
+        if ii==115:
+            controller.goto("hip_lx", .15)
         action = controller.update(observation)
         # if ii == 100 * (bugg+3):
         #     j = list(controller.joints.keys())[bugg]
@@ -108,9 +109,6 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
         tpac = env.env.env.data.joint("rootx").qacc[0]
         if VERBOSE and 2:
             print (f'{ii} trop {trop} trov {trov} tpov {tpov} tpac {tpac} tzpos {tzpos}')
-        if ii == 80:
-            controller.goto("hip_rx", -45)
-            controller.goto("hip_lx", 45)
         if ii > 80:
             if params is not None:
                 PD = trop + trov * DAMP + (tpov-TARGET_VEL) * TORSO_LIN_ADJ + tpac * TORSO_LIN_ADJ * DAMP2
