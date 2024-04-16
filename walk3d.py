@@ -78,14 +78,16 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
     observation, info = env.reset(seed=SEED)
-    phaser = math.pi * -0.18547231 #massively tweaked to be just-so walk for 3-4 steps while feedback kicks in
+    phaser = math.pi * -0.25 #massively tweaked to be just-so walk for 3-4 steps while feedback kicks in
     frames = []
     for ii in range(steps):
         action = controller.update(observation)
         if ii == 50:
-            env.env.env.data.body("root").xfrc_applied[0]=504
+            env.env.env.data.body("root").xfrc_applied[0] = 460
+            env.env.env.data.body("root").xfrc_applied[1] = 9
         if ii == 56:
             env.env.env.data.body("root").xfrc_applied[0]=0
+            env.env.env.data.body("root").xfrc_applied[1]=0
         observation, reward, terminated, truncated, info = env.step(action)
         if terminated or truncated:
             break
