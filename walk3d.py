@@ -154,7 +154,7 @@ def train(env, steps, epochs, params, temp=0.2):
         score = 999999
         random.seed(time.time()*1000)
         for k in range(3):          #take worst of 3
-            params[4] += random.gauss(0, .00001)                 # Inject some entropy
+            params[7] += random.gauss(0, .0001)                 # Inject some entropy
             time_score = runn(env, steps, params)
             score1 = env.env.env.data.joint("rootx").qpos[0]
             print ("    SCORE of 3:", score1)
@@ -171,6 +171,8 @@ def train(env, steps, epochs, params, temp=0.2):
             temp *= 10
         else:
             temp *= 0.9
+            if temp < 0.000001:
+                temp = 1
         print (f"  TRAINED epoch: {i} score {score} steps {time_score} temp: {temp} best {best} best params:{best_params}")
         total += score
         params = save_params
@@ -187,7 +189,7 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=1)
     parser.add_argument("--steps", type=int, default=500)
     parser.add_argument("--verbose", type=int, default=0)
-    parser.add_argument("--params", type = float, nargs=6)
+    parser.add_argument("--params", type = float, nargs=8)
     parser.add_argument("--train", action="store_true")
     parser.add_argument("--show", action="store_true")
     parser.add_argument("--record", action="store_true")
@@ -206,7 +208,7 @@ if __name__ == "__main__":
     RECORDING = args.record
     gym.register("Walker3d-v5", entry_point='gymnasium.envs.mujoco.walker3d_v5:Walker3dEnv')
     if args.train:
-        env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=True)
+        env = gym.make("Walker3d-v5", render_mode="human" if SHOW else "rgb_array", terminate_when_unhealthy=False) #mujoco bug, this doesn't work we check elsewhere
         env._max_episode_steps=args.steps
 
         if args.params:
