@@ -76,17 +76,10 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
     observation, info = env.reset(seed=SEED)
-    bugg = 0
+    phaser = 0
     frames = []
     for ii in range(steps):
-        if ii==115:
-            controller.goto("hip_lx", .15)
         action = controller.update(observation)
-        # if ii == 100 * (bugg+3):
-        #     j = list(controller.joints.keys())[bugg]
-        #     print (f"MODIFY joint: {bugg} {j}")
-        #     controller.goto(j, 2)
-        #     bugg += 1
         # if ii == 50:
         #     env.env.env.data.body("root").xfrc_applied[0]=510
         # if ii == 66:
@@ -123,13 +116,13 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
                 hip_r_range_use = hip_r_range
                 hip_l_offset_use = hip_l_offset
                 hip_r_offset_use = hip_r_offset
-            hip_l = math.sin(ii * speed_use + hip_l_phase) * hip_l_range_use + hip_l_offset_use
+            hip_l = math.sin(ii * speed_use + (hip_l_phase+phaser)) * hip_l_range_use + hip_l_offset_use
             controller.goto('hip_ly', hip_l)
-            hip_r = math.sin(ii * speed_use + hip_r_phase) * hip_r_range_use + hip_r_offset_use
+            hip_r = math.sin(ii * speed_use + (hip_r_phase+phaser)) * hip_r_range_use + hip_r_offset_use
             controller.goto('hip_ry', hip_r)
-            knee_l = math.sin(ii * speed_use + knee_l_phase) * knee_l_range + knee_l_offset
+            knee_l = math.sin(ii * speed_use + (knee_l_phase+phaser)) * knee_l_range + knee_l_offset
             controller.goto('knee_l', knee_l)
-            knee_r = math.sin(ii * speed_use + knee_r_phase) * knee_r_range + knee_r_offset
+            knee_r = math.sin(ii * speed_use + knee_r_phase+phaser) * knee_r_range + knee_r_offset
             controller.goto('knee_r', knee_r)
 
         if RECORDING:
