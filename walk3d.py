@@ -219,4 +219,4 @@ if __name__ == "__main__":
         observation, info = env.reset(seed=SEED)
         time.sleep(2)
         runn(env, args.steps, params=params, quit_when_unhealthy=not args.no_quit)
-        # env.close()
+    env.close()
