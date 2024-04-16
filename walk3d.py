@@ -76,7 +76,7 @@ def runn(env, steps, params=None, quit_when_unhealthy=True):
     for i, j in enumerate(controller.joints.keys()):
         controller.goto(j, restpose[i])
     observation, info = env.reset(seed=SEED)
-    phaser = 0
+    phaser = math.pi * -0.232075 #massively tweaked to be just-so walk for 3-4 steps while feedback kicks in
     frames = []
     for ii in range(steps):
         action = controller.update(observation)
