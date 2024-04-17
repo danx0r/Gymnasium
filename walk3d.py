@@ -152,7 +152,7 @@ def train(env, steps, epochs, params, temp=0.2):
     best_params = None
     for i in range(epochs):
         save_params = list(params)
-        for j in range(6, 8):
+        for j in range(8):
             params[j] += random.gauss(0, temp)
         print ("  RANDOMIZED params:", params)
         score = 999999
