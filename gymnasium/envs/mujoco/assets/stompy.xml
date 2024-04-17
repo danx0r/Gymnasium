@@ -172,11 +172,17 @@
     <body name="root" pos="-1.4 0 -.3" quat="1 0 0 1">
 
       <joint armature="0" axis="0 -1 0" damping="0" limited="false" name="rootx" pos="0 0 -1.25" stiffness="0" type="slide"/>
- 
+
+      <joint armature="0" axis="0 -1 0" damping="0" limited="false" name="rootxh" pos="0 0 -1.25" stiffness="0" type="hinge"/>
+
       <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 -1.25" ref="1.25" stiffness="0" type="slide"/>
  
-      <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rooty" pos="0 0 0" stiffness="0" type="hinge"/>
+      <!-- <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootzh" pos="0 0 -1.25" ref="1.25" stiffness="0" type="hinge"/> -->
  
+      <!-- <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rooty" pos="0 0 0" stiffness="0" type="hinge"/> -->
+
+      <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rootys" pos="0 0 0" stiffness="0" type="slide"/>
+
       <!-- <joint type="free"/> -->
 
       <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.615686 0.811765 0.929412 0.501961" mesh="torso_1_top_torso_1"/>
@@ -646,7 +652,9 @@
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_ankle_revolute"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x4_1_dof_x4"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_right_arm_1_x8_1_dof_x8"/>
+    <position inheritrange="1" kp="100" kv="7" joint="joint_right_arm_1_x8_2_dof_x8"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_left_arm_2_x8_1_dof_x8"/>
+    <position inheritrange="1" kp="100" kv="7" joint="joint_left_arm_2_x8_2_dof_x8"/>
   </actuator>
 
 </mujoco>
