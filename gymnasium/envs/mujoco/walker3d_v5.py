@@ -14,6 +14,7 @@ DEFAULT_CAMERA_CONFIG = {
     "distance": 4.0,
     "elevation": -10.0,
     "lookat": np.array((0.0, 0.0, -0.4)),
+    "azimuth": 160
 }
 
 
