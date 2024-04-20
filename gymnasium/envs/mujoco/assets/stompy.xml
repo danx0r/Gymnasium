@@ -443,5 +443,4 @@
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_left_leg_1_x4_1_dof_x4"/>
     <!-- <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x6_1_dof_x6"/> -->\
   </actuator>
-
 </mujoco>
