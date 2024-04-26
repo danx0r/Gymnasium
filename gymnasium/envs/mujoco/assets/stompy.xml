@@ -163,13 +163,13 @@
   </asset>
   <default>
     <joint armature="0.01" damping=".1" limited="true"/>
-    <geom conaffinity="0" condim="3" contype="1" density="1000" friction="0.99 0.3 0.3" rgba="0.8 0.6 .4 1"/>
+    <geom conaffinity="0" condim="3" contype="1" density="1000" friction="1 0.005 0.0001" rgba="0.8 0.6 .4 1"/>
   </default>
   <option gravity="0 0 -9.8" integrator="RK4" timestep="0.002"/>
   <worldbody>
     <light cutoff="100" diffuse="1 1 1" dir="-0 0 -1.3" directional="true" exponent="1" pos="0 0 1.3" specular=".1 .1 .1"/>
     <geom conaffinity="1" condim="3" name="floor" pos="0 0 -1.5" rgba="0.8 0.9 0.8 1" size="40 40 40" type="plane" material="MatPlane"/>
-    <body name="root" pos="-1.4 0 -.3" quat="1 0 0 1">
+    <body name="root" pos="-1.4 0 -.3" quat="1 -.02 -.02 1">
 
       <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootz" pos="0 0 -1.25" ref="1.25" stiffness="0" type="slide"/>
  
@@ -177,7 +177,7 @@
 
       <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rootys" pos="0 0 0" stiffness="0" type="slide"/>
 
-      <joint armature="0" axis="0 0 1" damping="0" limited="false" name="rootzh" pos="0 0 -1.25" ref="1.25" stiffness="0" type="hinge"/>
+      <joint armature="0" axis="0 0 1" damping="0"  limited="false" name="rootzh" pos="0 0 -1.25" ref="1.25" stiffness="0" type="hinge"/>
 
       <!-- <joint armature="0" axis="0 -1 0" damping="0" limited="false" name="rootxh" pos="0 0 -1.25" stiffness="0" type="hinge"/> -->
 
@@ -322,7 +322,7 @@
                   <geom pos="0 -0.0270536 0.002" quat="-2.32051e-08 1 0 0" type="mesh" rgba="0.647059 0.647059 0.647059 0.501961" mesh="legs_1_right_leg_1_ankle_1"/>
                   <geom pos="0.0645536 -0.0663036 0.00154071" quat="0.5 0.5 0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="legs_1_right_leg_1_x4_1_inner_1"/>
                   <geom pos="0.0645536 -0.0663036 0.00154071" quat="0.5 0.5 0.5 0.5" type="mesh" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="legs_1_right_leg_1_x4_1_inner_1"/>
-                  <body name="link_legs_1_right_leg_1_x4_1_outer_1" pos="0.0990536 -0.070981 0.0120465" quat="0.707107 3.53553e-08 0.707107 1.64085e-08">
+                  <body name="link_legs_1_right_leg_1_x4_1_outer_1" pos="0.12 -0.070981 0.0120465" quat="0.707107 3.53553e-08 0.707107 1.64085e-08">
                     <inertial pos="1.40239e-09 -0.0149273 -0.046385" quat="0.580421 0.40387 0.58042 0.403873" mass="0.390442" diaginertia="0.00151219 0.000952394 0.000741182"/>
                     <joint name="joint_legs_1_right_leg_1_x4_1_dof_x4" pos="0 0 0" axis="0 0 1" range="-0.785398 0.785398"/>
                     <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.768627 0.886275 0.952941 0.501961" mesh="legs_1_right_leg_1_x4_1_outer_1"/>
@@ -398,7 +398,7 @@
                   <geom pos="0 0.0270536 0.021" type="mesh" rgba="0.647059 0.647059 0.647059 0.501961" mesh="legs_1_left_leg_1_ankle_1"/>
                   <geom pos="0.0645536 0.0663036 0.0214593" quat="0.5 -0.5 0.5 -0.5" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="legs_1_left_leg_1_x4_1_inner_1"/>
                   <geom pos="0.0645536 0.0663036 0.0214593" quat="0.5 -0.5 0.5 -0.5" type="mesh" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="legs_1_left_leg_1_x4_1_inner_1"/>
-                  <body name="link_legs_1_left_leg_1_x4_1_outer_1" pos="0.0990536 0.070981 0.0109535" quat="1.89469e-08 -0.707107 0 -0.707107">
+                  <body name="link_legs_1_left_leg_1_x4_1_outer_1" pos="0.12 0.070981 0.0109535" quat="1.89469e-08 -0.707107 0 -0.707107">
                     <inertial pos="1.40239e-09 -0.0149273 -0.046385" quat="0.580421 0.40387 0.58042 0.403873" mass="0.390442" diaginertia="0.00151219 0.000952394 0.000741182"/>
                     <joint name="joint_legs_1_left_leg_1_x4_1_dof_x4" pos="0 0 0" axis="0 0 1" range="-0.785398 0.785398"/>
                     <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.768627 0.886275 0.952941 0.501961" mesh="legs_1_left_leg_1_x4_1_outer_1"/>
@@ -431,7 +431,7 @@
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_right_leg_1_x8_1_dof_x8"/>
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_right_leg_1_x10_2_dof_x10"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_right_leg_1_knee_revolute"/>
-    <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_right_leg_1_ankle_revolute"/>
+    <position inheritrange="1" kp="50" kv="3.5" joint="joint_legs_1_right_leg_1_ankle_revolute"/>
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_right_leg_1_x4_1_dof_x4"/>
     <!-- <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_right_leg_1_x6_1_dof_x6"/> -->
 
@@ -439,7 +439,7 @@
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_left_leg_1_x8_1_dof_x8"/>
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_left_leg_1_x10_1_dof_x10"/>
     <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_knee_revolute"/>
-    <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_left_leg_1_ankle_revolute"/>
+    <position inheritrange="1" kp="50" kv="3.5" joint="joint_legs_1_left_leg_1_ankle_revolute"/>
     <position inheritrange="1" kp="200" kv="14" joint="joint_legs_1_left_leg_1_x4_1_dof_x4"/>
     <!-- <position inheritrange="1" kp="100" kv="7" joint="joint_legs_1_left_leg_1_x6_1_dof_x6"/> -->\
   </actuator>
