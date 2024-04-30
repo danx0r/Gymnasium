@@ -177,7 +177,7 @@
 
       <joint armature="0" axis="1 0 0" damping="0" limited="false" name="rootys" pos="0 0 0" stiffness="0" type="slide"/>
 
-      <joint armature="0" axis="0 0 1" damping="0"  limited="false" name="rootzh" pos="0 0 -1.25" ref="1.25" stiffness="0" type="hinge"/>
+      <!-- <joint armature="0" axis="0 0 1" damping="0"  limited="false" name="rootzh" pos="0 0 -1.25" ref="1.25" stiffness="0" type="hinge"/> -->
 
       <!-- <joint armature="0" axis="0 -1 0" damping="0" limited="false" name="rootxh" pos="0 0 -1.25" stiffness="0" type="hinge"/> -->
 
