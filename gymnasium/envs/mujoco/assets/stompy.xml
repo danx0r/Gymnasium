@@ -214,7 +214,7 @@
       <geom pos="-1.4862e-05 0.101945 -0.0860179" quat="0.707107 0.707107 0 0" type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.654902 0.584314 0.823529 0.501961" mesh="torso_1_battery_1"/>
       <geom pos="-1.4862e-05 0.101945 -0.0860179" quat="0.707107 0.707107 0 0" type="mesh" rgba="0.654902 0.584314 0.823529 0.501961" mesh="torso_1_battery_1"/>
       <body name="link_head_1_x4_1_inner_1" pos="0.000148008 0.0434136 0.0633109" quat="0 2.32051e-08 -1 6.96153e-08">
-        <camera name="track" mode="trackcom" pos="0 -3 -0.25" xyaxes="1 0 0 0 0 1"/>
+        <camera name="track" mode="trackcom" pos="0 -3 -0.25" xyaxes="-1 0 0 0 0 -1"/>
         <inertial pos="-0.00744646 -0.0108504 -0.0772508" quat="0.945239 -0.104673 0.0326989 -0.307406" mass="0.378625" diaginertia="0.00114879 0.001103 0.000191269"/>
         <joint name="joint_head_1_x4_1_dof_x4" pos="0 0 0" axis="0 0 1" range="-2.51327 0.628319"/>
         <geom type="mesh" contype="0" conaffinity="0" group="1" density="0" rgba="0.972549 0.529412 0.00392157 0.501961" mesh="head_1_x4_1_inner_1"/>
